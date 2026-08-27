@@ -86,16 +86,10 @@ h1 { font-size: clamp(48px, 6.2vw, 88px); letter-spacing: -.065em; line-height: 
 .layer-toggle.active.short span { background: var(--coral); }
 .layer-toggle.active.optode span { background: var(--ink); }
 .montage-layout { display: grid; grid-template-columns: minmax(560px, 1fr) 370px; min-height: 790px; }
-.head-map { align-self: center; aspect-ratio: 1; background: white; border: 1.5px solid #70808d; border-radius: 50%; justify-self: center; position: relative; width: min(82%, 650px); }
-.head-map::after { border: 1px dashed #c4d0d9; border-radius: inherit; content: ''; inset: 9%; pointer-events: none; position: absolute; }
-.nose { background: #eef4f7; border: 1px solid #b9c8d4; border-bottom: 0; border-radius: 12px 12px 0 0; height: 23px; left: 50%; position: absolute; top: -17px; transform: translateX(-50%); width: 30px; }
-.ear { background: white; border: 1.5px solid #70808d; border-radius: 50%; height: 86px; position: absolute; top: 50%; transform: translateY(-50%); width: 23px; z-index: 0; }
-.left-ear { left: -17px; }
-.right-ear { right: -17px; }
-.orientation { color: #7b8c86; font-family: var(--font-geist-mono); font-size: 9px; letter-spacing: .14em; position: absolute; }
-.orientation.front { left: 50%; top: 5%; transform: translateX(-50%); }
-.orientation.left { left: -9%; top: 50%; }
-.orientation.right { right: -9%; top: 50%; }
+.head-map { align-self: center; aspect-ratio: 1; background: white; justify-self: center; position: relative; width: min(88%, 690px); }
+.head-outline { height: 100%; inset: 0; overflow: visible; pointer-events: none; position: absolute; width: 100%; z-index: 0; }
+.head-outline path { fill: none; stroke: #70808d; stroke-width: 1.5; }
+.head-outline .midline, .head-outline .guide-arc { fill: none; opacity: .5; stroke: #c4d0d9; stroke-dasharray: 3 4; stroke-width: 1; }
 .channel-line { background: transparent; border: 0; cursor: pointer; height: 14px; margin-top: -7px; padding: 0; position: absolute; transform-origin: left center; z-index: 1; }
 .channel-line::before { background: rgba(112, 128, 141, .38); content: ''; height: 1.5px; left: 0; position: absolute; right: 0; top: 6px; transition: height .15s, background .15s; }
 .channel-line.short::before { background: rgba(232, 78, 16, .5); height: 2px; }

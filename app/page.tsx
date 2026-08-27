@@ -70,29 +70,41 @@ const taskDurations: Record<TaskSelection, number> = {
   rest: 0,
 };
 
-const schematicRows = [
-  { y: 6, positions: [['Fp1', 40], ['Fpz', 50], ['Fp2', 60]] },
-  { y: 16, positions: [['AF7', 20], ['AF3', 35], ['AFz', 50], ['AF4', 65], ['AF8', 80]] },
-  { y: 26, positions: [['F7', 10], ['F5', 20], ['F3', 30], ['F1', 40], ['Fz', 50], ['F2', 60], ['F4', 70], ['F6', 80], ['F8', 90]] },
-  { y: 36, positions: [['FC5', 20], ['FC3', 30], ['FC1', 40], ['FCz', 50], ['FC2', 60], ['FC4', 70], ['FC6', 80]] },
-  { y: 46, positions: [['T7', 8], ['C5', 20], ['C3', 30], ['C1', 40], ['Cz', 50], ['C2', 60], ['C4', 70], ['C6', 80], ['T8', 92]] },
-  { y: 56, positions: [['TP7', 8], ['CP5', 20], ['CP3', 30], ['CP1', 40], ['CPz', 50], ['CP2', 60], ['CP4', 70], ['CP6', 80], ['TP8', 92]] },
-  { y: 66, positions: [['P7', 10], ['P5', 20], ['P3', 30], ['P1', 40], ['Pz', 50], ['P2', 60], ['P4', 70], ['P6', 80], ['P8', 90]] },
-  { y: 76, positions: [['PO3', 35], ['POz', 50], ['PO4', 65]] },
-  { y: 86, positions: [['O1', 40], ['Oz', 50], ['O2', 60]] },
-  { y: 96, positions: [['I1', 40], ['Iz', 50], ['I2', 60]] },
-] as const;
+// Pixel-traced from the supplied 732 × 732 flat-montage reference image.
+// These coordinates intentionally preserve its non-uniform spacing.
+const tracedPositions: Record<string, { x: number; y: number }> = {
+  Fp1: { x: 38.11, y: 18.44 }, Fpz: { x: 49.04, y: 16.80 }, Fp2: { x: 59.84, y: 18.44 },
+  AF7: { x: 28.14, y: 22.81 }, AF3: { x: 38.11, y: 25.41 }, AFz: { x: 49.04, y: 25.55 }, AF4: { x: 59.97, y: 25.41 }, AF8: { x: 70.22, y: 22.68 },
+  F7: { x: 19.81, y: 30.60 }, F5: { x: 26.50, y: 33.06 }, F3: { x: 33.88, y: 34.15 }, F1: { x: 41.39, y: 34.02 }, Fz: { x: 49.04, y: 34.15 }, F2: { x: 56.83, y: 34.15 }, F4: { x: 64.34, y: 34.02 }, F6: { x: 71.58, y: 33.06 }, F8: { x: 78.69, y: 30.46 },
+  FC5: { x: 22.81, y: 42.35 }, FC3: { x: 31.56, y: 42.35 }, FC1: { x: 40.30, y: 43.03 }, FCz: { x: 49.04, y: 43.03 }, FC2: { x: 57.79, y: 43.03 }, FC4: { x: 66.67, y: 42.21 }, FC6: { x: 75.41, y: 42.35 },
+  T7: { x: 12.43, y: 52.05 }, C5: { x: 21.58, y: 51.91 }, C3: { x: 30.74, y: 52.19 }, C1: { x: 39.75, y: 52.05 }, Cz: { x: 49.04, y: 52.19 }, C2: { x: 58.20, y: 52.05 }, C4: { x: 67.62, y: 52.05 }, C6: { x: 76.78, y: 51.91 }, T8: { x: 85.66, y: 51.91 },
+  TP7: { x: 14.21, y: 63.39 }, CP5: { x: 22.81, y: 62.16 }, CP3: { x: 31.56, y: 61.20 }, CP1: { x: 40.30, y: 61.20 }, CPz: { x: 49.04, y: 61.07 }, CP2: { x: 57.79, y: 61.20 }, CP4: { x: 66.67, y: 61.20 }, CP6: { x: 75.27, y: 62.16 }, TP8: { x: 83.88, y: 63.39 },
+  P7: { x: 19.67, y: 73.50 }, P5: { x: 26.50, y: 71.04 }, P3: { x: 33.88, y: 69.95 }, P1: { x: 41.39, y: 69.81 }, Pz: { x: 49.04, y: 69.95 }, P2: { x: 56.83, y: 69.81 }, P4: { x: 64.34, y: 69.95 }, P6: { x: 71.58, y: 71.04 }, P8: { x: 78.69, y: 73.50 },
+  PO3: { x: 38.11, y: 78.96 }, POz: { x: 49.04, y: 78.96 }, PO4: { x: 59.97, y: 78.96 },
+  O1: { x: 37.98, y: 86.20 }, Oz: { x: 49.04, y: 86.89 }, O2: { x: 59.84, y: 86.20 },
+  I1: { x: 35.66, y: 94.81 }, Iz: { x: 49.04, y: 95.90 }, I2: { x: 62.57, y: 94.81 },
+};
 
-const flatPositions = Object.fromEntries(
-  schematicRows.flatMap((row) => row.positions.map(([label, x]) => [label, { x, y: row.y }]))
-) as Record<string, { x: number; y: number }>;
+const tracedOptodeLabels: Record<string, string> = {
+  S1: 'Fpz', S2: 'AF4', S3: 'AF8', S4: 'Fz', S5: 'F4', S6: 'F8', S7: 'FC2', S8: 'FC6',
+  S9: 'Cz', S10: 'C4', S11: 'T8', S12: 'CP2', S13: 'CP6', S14: 'Pz', S15: 'P4', S16: 'P8',
+  S17: 'POz', S18: 'O1', S19: 'O2', S20: 'Iz', S21: 'P3', S22: 'P7', S23: 'CP1', S24: 'CP5',
+  S25: 'C3', S26: 'T7', S27: 'FC1', S28: 'FC5', S29: 'F3', S30: 'F7', S31: 'AF3', S32: 'AF7',
+  D1: 'Fp2', D2: 'AFz', D3: 'F2', D4: 'F6', D5: 'FCz', D6: 'FC4', D7: 'C2', D8: 'C6',
+  D9: 'CPz', D10: 'CP4', D11: 'TP8', D12: 'P2', D13: 'P6', D14: 'PO4', D15: 'Oz', D16: 'I2',
+  D17: 'I1', D18: 'PO3', D19: 'P1', D20: 'P5', D21: 'CP3', D22: 'TP7', D23: 'C1', D24: 'C5',
+  D25: 'FC3', D26: 'F1', D27: 'F5', D28: 'Fp1',
+};
 const optodeById = new Map(optodes.map((optode) => [optode.id, optode]));
 const shortChannels = channels.filter((channel) => channel.type === 'short');
 const shortDetectorIds = new Set(shortChannels.map((channel) => channel.detector));
 
 function flatPosition(optodeId: string) {
-  const optode = optodeById.get(optodeId);
-  return flatPositions[optode?.position ?? ''] ?? { x: 50, y: 50 };
+  return tracedPositions[tracedOptodeLabels[optodeId] ?? ''] ?? { x: 50, y: 50 };
+}
+
+function optodeReference(optodeId: string) {
+  return tracedOptodeLabels[optodeId] ?? optodeById.get(optodeId)?.position ?? 'Unmapped';
 }
 
 function channelLineStyle(channel: Channel) {
@@ -165,8 +177,13 @@ function MontageExplorer() {
 
         <div className="montage-layout">
           <div className="head-map" aria-label="Flat 10–20 view of the sub-01 MULPA fNIRS montage">
-            <div className="nose" aria-hidden="true" /><div className="ear left-ear" aria-hidden="true" /><div className="ear right-ear" aria-hidden="true" />
-            <span className="orientation front">FRONT</span><span className="orientation left">L</span><span className="orientation right">R</span>
+            <svg className="head-outline" viewBox="0 0 732 732" aria-hidden="true">
+              <path d="M278 70 C224 80 156 101 109 139 C49 188 24 280 22 369 C20 473 60 565 132 624 C179 663 225 683 282 695 M438 70 C492 80 560 101 607 139 C667 188 692 280 694 369 C696 473 656 565 584 624 C537 663 491 683 434 695" />
+              <path d="M278 70 C304 64 332 62 359 62 C386 62 413 64 438 70 M278 70 C301 57 331 11 359 11 C387 11 416 57 438 70" />
+              <path d="M23 332 C6 325 0 348 0 392 C0 436 7 460 22 456 C34 451 32 424 32 392 C32 361 35 337 23 332 M694 332 C711 325 718 348 718 392 C718 436 711 460 696 456 C684 451 686 424 686 392 C686 361 683 337 694 332" />
+              <line className="midline" x1="359" y1="62" x2="359" y2="702" /><line className="midline" x1="31" y1="381" x2="687" y2="381" />
+              <path className="guide-arc" d="M42 277 Q359 447 676 277 M67 539 Q359 384 651 539" />
+            </svg>
             {visibleRegular.map((channel) => (
               <button key={channel.id} className={`channel-line ${channel.type} ${active.id === channel.id ? 'selected' : ''}`} style={channelLineStyle(channel)} onMouseEnter={() => setActive(channel)} onFocus={() => setActive(channel)} onClick={() => setActive(channel)} aria-label={`${channel.id}, ${channel.source} to ${channel.detector}, ${channel.region}`} />
             ))}
@@ -174,8 +191,8 @@ function MontageExplorer() {
               const point = flatPosition(optode.id);
               const pairedShort = optode.type === 'source' ? visibleShort.get(optode.id) : undefined;
               return (
-                <span className={`optode-node ${optode.type} ${pairedShort ? 'paired-short' : ''}`} key={optode.id} style={{ left: `${point.x}%`, top: `${point.y}%` }} title={`${optode.position} · ${optode.id}${pairedShort ? ` · ${pairedShort.detector}` : ''}`}>
-                  <b>{optode.position}</b><small>{optode.id}{pairedShort ? ` · ${pairedShort.detector}` : ''}</small>
+                <span className={`optode-node ${optode.type} ${pairedShort ? 'paired-short' : ''}`} key={optode.id} style={{ left: `${point.x}%`, top: `${point.y}%` }} title={`${optodeReference(optode.id)} · ${optode.id}${pairedShort ? ` · ${pairedShort.detector}` : ''}`}>
+                  <b>{optodeReference(optode.id)}</b><small>{optode.id}{pairedShort ? ` · ${pairedShort.detector}` : ''}</small>
                 </span>
               );
             })}
@@ -188,7 +205,7 @@ function MontageExplorer() {
           <aside className="channel-inspector" aria-live="polite">
             <p className="inspector-label">Selected channel</p>
             <div className="channel-title"><span className={`channel-swatch ${active.type}`} /><h3>{active.id}</h3><span className="channel-type">{active.type === 'short' ? 'Short' : 'Regular'}</span></div>
-            <dl><div><dt>Source–detector pair</dt><dd>{active.source} – {active.detector}</dd></div><div><dt>10–20 reference</dt><dd>{optodes.find((item) => item.id === active.source)?.position} – {optodes.find((item) => item.id === active.detector)?.position}</dd></div><div><dt>Distance</dt><dd>{active.distance} mm</dd></div><div><dt>Midpoint</dt><dd>{active.mni.join(', ')} mm</dd></div><div><dt>Anatomical region</dt><dd>{active.region}</dd></div><div><dt>Coordinate space</dt><dd>{generatedData.coordinateSystem}</dd></div></dl>
+            <dl><div><dt>Source–detector pair</dt><dd>{active.source} – {active.detector}</dd></div><div><dt>10–20 reference</dt><dd>{optodeReference(active.source)} – {optodeReference(active.detector)}</dd></div><div><dt>Distance</dt><dd>{active.distance} mm</dd></div><div><dt>Midpoint</dt><dd>{active.mni.join(', ')} mm</dd></div><div><dt>Anatomical region</dt><dd>{active.region}</dd></div><div><dt>Coordinate space</dt><dd>{generatedData.coordinateSystem}</dd></div></dl>
             <p className="provisional-note"><strong>Atlas note.</strong> Positions and pairs come from the supplied BIDS/SNIRF files. The sidecar specifies MNI space, but no cortical parcellation; region names are broad approximations until authoritative fOLD output is supplied.</p>
           </aside>
         </div>
