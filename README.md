@@ -25,3 +25,11 @@ excluded. The website's compact, derived display data is kept in
 `scripts/prepare_site_data.py` is only for regenerating that derived data on a
 local machine with access to the raw dataset. Its input paths must be adapted
 before use; it is not run by GitHub Actions.
+
+## Social-preview image
+
+`public/og.png` is the image used when the website link is shared on services
+such as Slack, LinkedIn, or WhatsApp. You can replace it manually with a PNG
+that is 1200 × 630 pixels, keeping the same filename. Commit and push the
+replacement. The metadata includes a version query so newly shared links use
+the updated image, although individual services may keep their own cache.

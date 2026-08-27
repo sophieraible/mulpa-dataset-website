@@ -37,7 +37,7 @@ button { font: inherit; }
 }
 .brand { align-items: center; display: flex; line-height: 1; }
 .brand img { display: block; height: auto; max-height: 50px; object-fit: contain; width: min(310px, 27vw); }
-.footer-logo { filter: brightness(0) invert(1); }
+.footer-logo { filter: none; }
 nav { display: flex; font-size: 14px; gap: 28px; }
 nav a:hover { color: var(--teal); }
 .site-header > .button { justify-self: end; }
@@ -235,7 +235,10 @@ footer { background: var(--ink); color: white; display: grid; gap: 60px; grid-te
 footer > div > p { color: #b8c7d4; font-size: 12px; line-height: 1.5; margin: 18px 0 0; max-width: 330px; }
 .footer-links { display: grid; font-size: 13px; gap: 12px; }
 .footer-links a:hover { color: var(--lime); }
+.footer-meta { align-self: start; }
+.footer-meta > p:first-child { margin-top: 0; }
 .prototype-note { font-size: 10px; }
+.site-version { color: white; font-size: 10px; font-weight: 700; }
 
 @media (max-width: 850px) {
   nav { display: none; }
