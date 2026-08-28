@@ -257,21 +257,33 @@ footer > div > p { color: #b8c7d4; font-size: 12px; line-height: 1.5; margin: 18
 
 @media (max-width: 560px) {
   .site-header { padding: 0 20px; }
-  .brand img { max-height: 38px; width: 220px; }
-  .hero, .section { padding-left: 20px; padding-right: 20px; }
+  .brand img { max-height: 38px; width: min(190px, 52vw); }
+  .site-header > .button { font-size: 12px; padding: 8px 10px; }
+  .hero, .section, .dataset-overview { padding-left: 20px; padding-right: 20px; }
   h1 { font-size: 46px; }
   .hero-actions { align-items: flex-start; flex-direction: column; }
   .stat-grid div:nth-child(even) { padding-left: 18px; }
   .montage-controls { align-items: stretch; flex-direction: column; }
   .region-filter { align-items: stretch; flex-direction: column; margin-left: 0; }
   .montage-layout { min-height: 0; }
-  .head-map { margin: 60px auto; }
+  .head-map { margin: 60px auto; width: min(84vw, 380px); }
+  .optode-node { border-width: 1px; height: 24px; width: 24px; }
+  .optode-node b { font-size: 5px; }
+  .optode-node small { font-size: 4px; margin-top: 1px; }
+  .channel-line { height: 22px; margin-top: -11px; }
+  .channel-line::before { top: 10px; }
+  .channel-line:hover::before, .channel-line:focus-visible::before, .channel-line.selected::before { top: 9px; }
+  .short-channel-hit { border-width: 2px; height: 28px; width: 28px; }
+  .short-channel-hit:hover, .short-channel-hit:focus-visible, .short-channel-hit.selected { box-shadow: 0 0 0 2px var(--lime); }
   .channel-inspector { padding: 36px 24px; }
   .filter-bar { grid-template-columns: 1fr; }
   .match-count { margin-left: 0; }
   .physiology-grid, .task-grid { grid-template-columns: 1fr; }
   .signal-toolbar { align-items: flex-start; flex-direction: column; gap: 16px; }
   .signal-toolbar h3 { display: block; margin: 12px 0 0; }
-  .signal-plot { height: 360px; }
+  .signal-toolbar > p { text-align: left; }
+  .signal-plot { grid-template-columns: 112px minmax(0, 1fr); height: auto; }
+  .signal-labels { padding-left: 14px; }
+  .signal-axis { margin-left: 132px; }
   footer { grid-template-columns: 1fr; padding-left: 20px; padding-right: 20px; }
 }
