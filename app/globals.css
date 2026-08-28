@@ -73,6 +73,8 @@ h1 { font-size: clamp(48px, 6.2vw, 88px); letter-spacing: -.065em; line-height: 
 
 .dataset-overview { margin: 0 auto; max-width: 1320px; padding: 0 5vw 92px; }
 .dataset-overview img { display: block; height: auto; margin: 0 auto; width: 80%; }
+.dataset-overview p { color: var(--muted); font-size: 12px; line-height: 1.5; margin: 14px auto 0; width: 80%; }
+.dataset-overview a { border-bottom: 1px solid currentColor; color: var(--teal-dark); }
 
 .section { margin: 0 auto; max-width: 1320px; padding: 105px 5vw; }
 .montage-section { max-width: none; background: var(--ink); color: white; }
