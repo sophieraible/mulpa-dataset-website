@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import generatedData from './derived-data.json';
 import { Participant, PhysiologyQc, TaskKey, participants, physiology, taskCards, taskColumns } from './data';
 
 const assetBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+const BrainMontage3D = lazy(() => import('./BrainMontage3D'));
 const lastUpdated = process.env.NEXT_PUBLIC_LAST_UPDATED ?? new Date().toISOString().slice(0, 10);
 const formattedLastUpdated = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
@@ -104,6 +105,7 @@ const tracedOptodeLabels: Record<string, string> = {
   D25: 'FC3', D26: 'F1', D27: 'F5', D28: 'Fp1',
 };
 const optodeById = new Map(optodes.map((optode) => [optode.id, optode]));
+const channelById = new Map(channels.map((channel) => [channel.id, channel]));
 const shortChannels = channels.filter((channel) => channel.type === 'short');
 const shortDetectorIds = new Set(shortChannels.map((channel) => channel.detector));
 
@@ -153,6 +155,7 @@ function syntheticTrace(trace: SignalTrace, task: TaskSelection, time: number[])
 }
 
 function MontageExplorer() {
+  const [view, setView] = useState<'2d' | '3d'>('2d');
   const [showLong, setShowLong] = useState(true);
   const [showShort, setShowShort] = useState(true);
   const [showOptodes, setShowOptodes] = useState(true);
@@ -175,6 +178,13 @@ function MontageExplorer() {
       </div>
 
       <div className="montage-card">
+        <div className="montage-view-bar">
+          <div className="montage-tabs" role="tablist" aria-label="Montage view">
+            <button type="button" role="tab" aria-selected={view === '2d'} className={view === '2d' ? 'active' : ''} onClick={() => setView('2d')}>2D montage</button>
+            <button type="button" role="tab" aria-selected={view === '3d'} className={view === '3d' ? 'active' : ''} onClick={() => setView('3d')}>3D brain</button>
+          </div>
+          <p>{view === '2d' ? 'Pixel-traced 10–20 schematic' : 'ICBM152 nonlinear asymmetric 2009c surface'}</p>
+        </div>
         <div className="montage-controls">
           <button className={`layer-toggle long ${showLong ? 'active' : ''}`} onClick={() => setShowLong(!showLong)} aria-pressed={showLong}><span /> Regular channels <b>102</b></button>
           <button className={`layer-toggle short ${showShort ? 'active' : ''}`} onClick={() => setShowShort(!showShort)} aria-pressed={showShort}><span /> Short channels <b>32</b></button>
@@ -184,7 +194,7 @@ function MontageExplorer() {
         </div>
 
         <div className="montage-layout">
-          <div className="head-map" aria-label="Flat 10–20 view of the sub-01 MULPA fNIRS montage">
+          {view === '2d' ? <div className="head-map" role="tabpanel" aria-label="Flat 10–20 view of the sub-01 MULPA fNIRS montage">
             <svg className="head-outline" viewBox="0 0 732 732" aria-hidden="true">
               <path d="M278 70 C224 80 156 101 109 139 C49 188 24 280 22 369 C20 473 60 565 132 624 C179 663 225 683 282 695 M438 70 C492 80 560 101 607 139 C667 188 692 280 694 369 C696 473 656 565 584 624 C537 663 491 683 434 695" />
               <path d="M278 70 C304 64 332 62 359 62 C386 62 413 64 438 70 M278 70 C301 57 331 11 359 11 C387 11 416 57 438 70" />
@@ -208,12 +218,25 @@ function MontageExplorer() {
               const point = flatPosition(channel.source);
               return <button key={channel.id} className={`short-channel-hit ${active.id === channel.id ? 'selected' : ''}`} style={{ left: `${point.x}%`, top: `${point.y}%` }} onMouseEnter={() => setActive(channel)} onFocus={() => setActive(channel)} onClick={() => setActive(channel)} aria-label={`${channel.id}, short channel ${channel.source} to ${channel.detector}, ${channel.region}`} />;
             })}
-          </div>
+          </div> : <Suspense fallback={<div className="brain-viewer brain-suspense">Preparing 3D view…</div>}>
+            <BrainMontage3D
+              channels={visible}
+              optodes={optodes}
+              shortDetectorIds={shortDetectorIds}
+              showOptodes={showOptodes}
+              activeChannelId={active.id}
+              assetBasePath={assetBasePath}
+              onSelect={(channelId) => {
+                const channel = channelById.get(channelId);
+                if (channel) setActive(channel);
+              }}
+            />
+          </Suspense>}
 
           <aside className="channel-inspector" aria-live="polite">
             <p className="inspector-label">Selected channel</p>
             <div className="channel-title"><span className={`channel-swatch ${active.type}`} /><h3>{active.id}</h3><span className="channel-type">{active.type === 'short' ? 'Short' : 'Regular'}</span></div>
-            <dl><div><dt>Source–detector pair</dt><dd>{active.source} – {active.detector}</dd></div><div><dt>10–20 reference</dt><dd>{active.type === 'short' ? optodeReference(active.source) : `${optodeReference(active.source)} – ${optodeReference(active.detector)}`}</dd></div><div><dt>Distance</dt><dd>{active.distance} mm</dd></div><div><dt>Midpoint</dt><dd>{active.mni.join(', ')} mm</dd></div><div><dt>Anatomical region</dt><dd>{active.region}</dd></div><div><dt>Coordinate space</dt><dd>{generatedData.coordinateSystem}</dd></div></dl>
+            <dl><div><dt>Source–detector pair</dt><dd>{active.source} – {active.detector}</dd></div><div><dt>10–20 reference</dt><dd>{active.type === 'short' ? optodeReference(active.source) : `${optodeReference(active.source)} – ${optodeReference(active.detector)}`}</dd></div><div><dt>Distance</dt><dd>{active.distance} mm</dd></div><div><dt>Midpoint</dt><dd>{active.mni.join(', ')} mm</dd></div><div><dt>Anatomical region</dt><dd>{active.region}</dd></div></dl>
             <p className="provisional-note"><strong>Atlas note.</strong> Positions and pairs come from the supplied BIDS/SNIRF files. The sidecar specifies MNI space, but no cortical parcellation; region names are broad approximations until authoritative fOLD output is supplied.</p>
           </aside>
         </div>
