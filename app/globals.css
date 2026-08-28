@@ -71,8 +71,8 @@ h1 { font-size: clamp(48px, 6.2vw, 88px); letter-spacing: -.065em; line-height: 
 .stat-grid dt { font-size: clamp(28px, 3vw, 42px); font-weight: 760; letter-spacing: -.04em; }
 .stat-grid dd { color: var(--muted); font-size: 13px; margin: 7px 0 0; }
 
-.dataset-overview { margin: 0 auto; max-width: 1440px; padding: 0 5vw 92px; }
-.dataset-overview img { display: block; height: auto; margin: 0 auto; max-width: 1320px; width: 100%; }
+.dataset-overview { margin: 0 auto; max-width: 1320px; padding: 0 5vw 92px; }
+.dataset-overview img { display: block; height: auto; margin: 0; width: 100%; }
 
 .section { margin: 0 auto; max-width: 1320px; padding: 105px 5vw; }
 .montage-section { max-width: none; background: var(--ink); color: white; }
