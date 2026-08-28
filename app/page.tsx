@@ -120,83 +120,6 @@ function channelLineStyle(channel: Channel) {
   };
 }
 
-function ThreeDimensionalMontage({ visibleChannels, showOptodes }: { visibleChannels: Channel[]; showOptodes: boolean }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const dragRef = useRef<{ x: number; y: number } | null>(null);
-  const [rotation, setRotation] = useState({ x: -0.45, y: 0.55 });
-  const [zoom, setZoom] = useState(1);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const context = canvas.getContext('2d');
-    if (!context) return;
-
-    const positions = new Map(optodes.map((optode) => [optode.id, optode.mni]));
-    const centre = optodes.reduce((sum, optode) => optode.mni.map((value, index) => sum[index] + value), [0, 0, 0]).map((value) => value / optodes.length);
-    const extent = Math.max(...optodes.flatMap((optode) => optode.mni.map((value, index) => Math.abs(value - centre[index]))));
-
-    const draw = () => {
-      const bounds = canvas.getBoundingClientRect();
-      const ratio = window.devicePixelRatio || 1;
-      canvas.width = bounds.width * ratio;
-      canvas.height = bounds.height * ratio;
-      context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      context.clearRect(0, 0, bounds.width, bounds.height);
-
-      const scale = Math.min(bounds.width, bounds.height) * 0.37 * zoom / extent;
-      const project = (position: number[]) => {
-        const x = position[0] - centre[0];
-        const vertical = position[2] - centre[2];
-        const depth = position[1] - centre[1];
-        const yawX = x * Math.cos(rotation.y) - depth * Math.sin(rotation.y);
-        const yawDepth = x * Math.sin(rotation.y) + depth * Math.cos(rotation.y);
-        const pitchY = vertical * Math.cos(rotation.x) - yawDepth * Math.sin(rotation.x);
-        const pitchDepth = vertical * Math.sin(rotation.x) + yawDepth * Math.cos(rotation.x);
-        const perspective = 1 + pitchDepth / (extent * 5);
-        return { x: bounds.width / 2 + yawX * scale * perspective, y: bounds.height / 2 - pitchY * scale * perspective, depth: pitchDepth, perspective };
-      };
-
-      context.strokeStyle = 'rgba(112, 128, 141, .18)';
-      context.lineWidth = 1;
-      context.beginPath();
-      context.ellipse(bounds.width / 2, bounds.height / 2, bounds.width * .31, bounds.height * .39, 0, 0, Math.PI * 2);
-      context.stroke();
-
-      visibleChannels.forEach((channel) => {
-        const source = positions.get(channel.source);
-        const detector = positions.get(channel.detector);
-        if (!source || !detector) return;
-        const from = project(source);
-        const to = project(detector);
-        context.strokeStyle = channel.type === 'short' ? 'rgba(232, 78, 16, .52)' : 'rgba(112, 128, 141, .38)';
-        context.lineWidth = channel.type === 'short' ? 2.2 : 1.4;
-        context.beginPath(); context.moveTo(from.x, from.y); context.lineTo(to.x, to.y); context.stroke();
-      });
-
-      if (showOptodes) {
-        optodes.map((optode) => ({ optode, point: project(optode.mni) })).sort((a, b) => a.point.depth - b.point.depth).forEach(({ optode, point }) => {
-          context.fillStyle = optode.type === 'source' ? '#ef2b2d' : '#2f85bd';
-          context.beginPath(); context.arc(point.x, point.y, 5.5 * point.perspective, 0, Math.PI * 2); context.fill();
-        });
-      }
-    };
-
-    draw();
-    const observer = new ResizeObserver(draw);
-    observer.observe(canvas);
-    return () => observer.disconnect();
-  }, [rotation, showOptodes, visibleChannels, zoom]);
-
-  return (
-    <div className="three-d-view">
-      <canvas ref={canvasRef} className="three-d-canvas" aria-label="Rotatable three-dimensional fNIRS montage" onPointerDown={(event) => { event.currentTarget.setPointerCapture(event.pointerId); dragRef.current = { x: event.clientX, y: event.clientY }; }} onPointerMove={(event) => { if (!dragRef.current) return; const dx = event.clientX - dragRef.current.x; const dy = event.clientY - dragRef.current.y; dragRef.current = { x: event.clientX, y: event.clientY }; setRotation((current) => ({ x: current.x + dy * 0.01, y: current.y + dx * 0.01 })); }} onPointerUp={() => { dragRef.current = null; }} onPointerCancel={() => { dragRef.current = null; }} onWheel={(event) => { event.preventDefault(); setZoom((current) => Math.max(.65, Math.min(1.7, current - event.deltaY * .001))); }} />
-      <div className="three-d-legend"><span><i className="source" /> Sources</span><span><i className="detector" /> Detectors</span><span><i className="regular" /> Regular channels</span><span><i className="short" /> Short channels</span></div>
-      <p>Drag to rotate · Use the mouse wheel or trackpad to zoom</p>
-    </div>
-  );
-}
-
 function syntheticTrace(trace: SignalTrace, task: TaskSelection, time: number[]) {
   const taskIndex = Math.max(0, taskCards.findIndex((item) => item.key === task));
   const duration = taskDurations[task];
@@ -225,7 +148,6 @@ function MontageExplorer() {
   const [showLong, setShowLong] = useState(true);
   const [showShort, setShowShort] = useState(true);
   const [showOptodes, setShowOptodes] = useState(true);
-  const [view, setView] = useState<'two-d' | 'three-d'>('two-d');
   const [region, setRegion] = useState('All regions');
   const [active, setActive] = useState<Channel>(channels[35]);
 
@@ -253,12 +175,7 @@ function MontageExplorer() {
           <p className="visible-count">{visible.length} visible</p>
         </div>
 
-        <div className="montage-view-tabs" role="tablist" aria-label="Montage view">
-          <button role="tab" aria-selected={view === 'two-d'} className={view === 'two-d' ? 'active' : ''} onClick={() => setView('two-d')}>2D flat view</button>
-          <button role="tab" aria-selected={view === 'three-d'} className={view === 'three-d' ? 'active' : ''} onClick={() => setView('three-d')}>3D rotatable view</button>
-        </div>
-
-        {view === 'two-d' ? <div className="montage-layout">
+        <div className="montage-layout">
           <div className="head-map" aria-label="Flat 10–20 view of the sub-01 MULPA fNIRS montage">
             <svg className="head-outline" viewBox="0 0 732 732" aria-hidden="true">
               <path d="M278 70 C224 80 156 101 109 139 C49 188 24 280 22 369 C20 473 60 565 132 624 C179 663 225 683 282 695 M438 70 C492 80 560 101 607 139 C667 188 692 280 694 369 C696 473 656 565 584 624 C537 663 491 683 434 695" />
@@ -291,7 +208,7 @@ function MontageExplorer() {
             <dl><div><dt>Source–detector pair</dt><dd>{active.source} – {active.detector}</dd></div><div><dt>10–20 reference</dt><dd>{active.type === 'short' ? optodeReference(active.source) : `${optodeReference(active.source)} – ${optodeReference(active.detector)}`}</dd></div><div><dt>Distance</dt><dd>{active.distance} mm</dd></div><div><dt>Midpoint</dt><dd>{active.mni.join(', ')} mm</dd></div><div><dt>Anatomical region</dt><dd>{active.region}</dd></div><div><dt>Coordinate space</dt><dd>{generatedData.coordinateSystem}</dd></div></dl>
             <p className="provisional-note"><strong>Atlas note.</strong> Positions and pairs come from the supplied BIDS/SNIRF files. The sidecar specifies MNI space, but no cortical parcellation; region names are broad approximations until authoritative fOLD output is supplied.</p>
           </aside>
-        </div> : <ThreeDimensionalMontage visibleChannels={visible} showOptodes={showOptodes} />}
+        </div>
       </div>
     </section>
   );
@@ -506,9 +423,9 @@ function CitationSection() {
       <div className="citation-card">
         <div className="citation-copy">
           <p>{citation}</p>
-          <div className="citation-actions"><button onClick={copyCitation}>{copyLabel}</button><a href="https://doi.org/10.64898/2026.06.06.728412">Open DOI ↗</a></div>
+          <div className="citation-actions"><button onClick={copyCitation}>{copyLabel}</button><a href="https://doi.org/10.64898/2026.06.06.728412" target="_blank" rel="noreferrer">Open DOI ↗</a></div>
         </div>
-        <a className="license-card" href="https://creativecommons.org/licenses/by-nc/4.0/" aria-label="Creative Commons Attribution-NonCommercial 4.0 International license">
+        <a className="license-card" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noreferrer" aria-label="Creative Commons Attribution-NonCommercial 4.0 International license">
           <span>Dataset license</span><strong>CC BY-NC 4.0</strong><small>Attribution · Non-commercial</small>
         </a>
       </div>
@@ -525,10 +442,10 @@ export default function Home() {
       <header className="site-header">
         <a className="brand" href="#top" aria-label="MULPA home"><img className="header-logo" src={`${assetBasePath}/maastricht-university-logo.png`} alt="Maastricht University" /></a>
         <nav aria-label="Main navigation"><a href="#montage">Montage</a><a href="#participants">Participants</a><a href="#tasks">Tasks</a><a href="#physiology">Physiology</a><a href="#signals">Example</a><a href="#cite">Cite</a></nav>
-        <a className="button button-small" href="https://zenodo.org/records/21033499">Open dataset</a>
+        <a className="button button-small" href="https://zenodo.org/records/21033499" target="_blank" rel="noreferrer">Open dataset</a>
       </header>
       <section className="hero" id="top">
-        <div><p className="eyebrow">A multiple-paradigm physiology-rich fNIRS resource</p><h1>The MULPA dataset</h1><p className="author-list">{authorNames.map((name, index) => <span key={name}>{name}{index < 2 && <sup>*</sup>}{index < authorNames.length - 2 ? ', ' : index === authorNames.length - 2 ? ', and ' : ''}</span>)}</p><div className="author-notes"><span><sup>*</sup> Shared first authors</span><a href="mailto:sp.raible@maastrichtuniversity.nl">Correspondence: sp.raible@maastrichtuniversity.nl</a></div><p className="hero-copy">MULPA pairs near-whole-head fNIRS with extensive short-separation coverage and synchronized systemic physiology across motor, affective, perceptual, music, and resting-state paradigms.</p><div className="hero-actions"><a className="button" href="#montage">Explore the montage</a><a className="text-link" href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1">Read the preprint <span aria-hidden="true">↗</span></a></div></div>
+        <div><p className="eyebrow">A multiple-paradigm physiology-rich fNIRS resource</p><h1>The MULPA dataset</h1><p className="author-list">{authorNames.map((name, index) => <span key={name}>{name}{index < 2 && <sup>*</sup>}{index < authorNames.length - 2 ? ', ' : index === authorNames.length - 2 ? ', and ' : ''}</span>)}</p><div className="author-notes"><span><sup>*</sup> Shared first authors</span><a href="mailto:sp.raible@maastrichtuniversity.nl">Correspondence: sp.raible@maastrichtuniversity.nl</a></div><p className="hero-copy">MULPA pairs near-whole-head fNIRS with extensive short-separation coverage and synchronized systemic physiology across motor, affective, perceptual, music, and resting-state paradigms.</p><div className="hero-actions"><a className="button" href="#montage">Explore the montage</a><a className="text-link" href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1" target="_blank" rel="noreferrer">Read the preprint <span aria-hidden="true">↗</span></a></div></div>
         <dl className="stat-grid"><div><dt>57</dt><dd>participants</dd></div><div><dt>134</dt><dd>fNIRS channels</dd></div><div><dt>32</dt><dd>short channels</dd></div><div><dt>7</dt><dd>different tasks</dd></div><div><dt>12.6 Hz</dt><dd>sampling rate</dd></div><div><dt>30+ h</dt><dd>recordings</dd></div></dl>
       </section>
       <MontageExplorer />
@@ -539,7 +456,7 @@ export default function Home() {
       <CitationSection />
       <footer>
         <div><a className="brand" href="#top"><img className="footer-logo" src={`${assetBasePath}/maastricht-university-logo-white.png`} alt="Maastricht University" /></a></div>
-        <div className="footer-links"><a href="https://zenodo.org/records/21033499">Dataset ↗</a><a href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1">Preprint ↗</a></div>
+        <div className="footer-links"><a href="https://zenodo.org/records/21033499" target="_blank" rel="noreferrer">Dataset ↗</a><a href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1" target="_blank" rel="noreferrer">Preprint ↗</a></div>
         <div className="footer-meta"><p className="license">BIDS 1.11.1 · SNIRF · CC BY-NC 4.0</p><p className="prototype-note">MNI region labels remain provisional until fOLD output is available.</p><p className="prototype-note">Website created by Sophie Raible using Codex (GPT-5).</p><p className="site-version">Last updated: 27 August 2026</p></div>
       </footer>
     </main>
