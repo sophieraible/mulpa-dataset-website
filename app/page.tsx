@@ -5,6 +5,13 @@ import generatedData from './derived-data.json';
 import { Participant, PhysiologyQc, TaskKey, participants, physiology, taskCards, taskColumns } from './data';
 
 const assetBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+const lastUpdated = process.env.NEXT_PUBLIC_LAST_UPDATED ?? new Date().toISOString().slice(0, 10);
+const formattedLastUpdated = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'UTC',
+}).format(new Date(`${lastUpdated}T00:00:00Z`));
 
 type Channel = {
   id: string;
@@ -462,7 +469,7 @@ export default function Home() {
       <footer>
         <div><a className="brand" href="#top"><img className="footer-logo" src={`${assetBasePath}/maastricht-university-logo-white.png`} alt="Maastricht University" /></a></div>
         <div className="footer-links"><a href="https://zenodo.org/records/21033499" target="_blank" rel="noreferrer">Dataset ↗</a><a href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1" target="_blank" rel="noreferrer">Preprint ↗</a></div>
-        <div className="footer-meta"><p className="license">BIDS 1.11.1 · SNIRF · CC BY-NC 4.0</p><p className="prototype-note">MNI region labels remain provisional until fOLD output is available.</p><p className="prototype-note">Website created by Sophie Raible using Codex (GPT-5).</p><p className="site-version">Last updated: 27 August 2026</p></div>
+        <div className="footer-meta"><p className="license">BIDS 1.11.1 · SNIRF · CC BY-NC 4.0</p><p className="prototype-note">MNI region labels remain provisional until fOLD output is available.</p><p className="prototype-note">Website created by Sophie Raible using Codex (GPT-5).</p><p className="site-version">Last updated: {formattedLastUpdated}</p></div>
       </footer>
     </main>
   );
