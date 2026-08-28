@@ -21,7 +21,8 @@ type BrainMontage3DProps = {
   channels: BrainChannel[];
   optodes: BrainOptode[];
   shortDetectorIds: Set<string>;
-  showOptodes: boolean;
+  showSources: boolean;
+  showDetectors: boolean;
   activeChannelId: string;
   assetBasePath: string;
   onSelect: (channelId: string) => void;
@@ -75,7 +76,8 @@ export default function BrainMontage3D({
   channels,
   optodes,
   shortDetectorIds,
-  showOptodes,
+  showSources,
+  showDetectors,
   activeChannelId,
   assetBasePath,
   onSelect,
@@ -268,6 +270,7 @@ export default function BrainMontage3D({
       const hovered = channel.id === hoveredChannelId;
 
       if (channel.type === 'short') {
+        if (!showDetectors) continue;
         const ringNormal = start.clone().sub(HEAD_CENTER).normalize();
         const ring = new THREE.Mesh(
           new THREE.TorusGeometry(4.25, selected ? 1.45 : hovered ? 1.25 : 0.74, 8, 28),
@@ -316,19 +319,19 @@ export default function BrainMontage3D({
       viewer.montage.add(hitTube);
     }
 
-    if (showOptodes) {
-      const geometry = new THREE.SphereGeometry(2.55, 14, 10);
-      const sourceMaterial = new THREE.MeshStandardMaterial({ color: '#ef2b2d', roughness: 0.28 });
-      const detectorMaterial = new THREE.MeshStandardMaterial({ color: '#2f85bd', roughness: 0.28 });
-      for (const optode of optodes) {
-        if (shortDetectorIds.has(optode.id)) continue;
-        const marker = new THREE.Mesh(geometry, optode.type === 'source' ? sourceMaterial : detectorMaterial);
-        marker.position.copy(mniToThree(optode.mni));
-        marker.renderOrder = 5;
-        viewer.montage.add(marker);
-      }
+    const geometry = new THREE.SphereGeometry(2.55, 14, 10);
+    const sourceMaterial = new THREE.MeshStandardMaterial({ color: '#ef2b2d', roughness: 0.28 });
+    const detectorMaterial = new THREE.MeshStandardMaterial({ color: '#2f85bd', roughness: 0.28 });
+    for (const optode of optodes) {
+      if (shortDetectorIds.has(optode.id)) continue;
+      if (optode.type === 'source' && !showSources) continue;
+      if (optode.type === 'detector' && !showDetectors) continue;
+      const marker = new THREE.Mesh(geometry, optode.type === 'source' ? sourceMaterial : detectorMaterial);
+      marker.position.copy(mniToThree(optode.mni));
+      marker.renderOrder = 5;
+      viewer.montage.add(marker);
     }
-  }, [activeChannelId, channels, hoveredChannelId, optodes, shortDetectorIds, showOptodes, status]);
+  }, [activeChannelId, channels, hoveredChannelId, optodes, shortDetectorIds, showDetectors, showSources, status]);
 
   const resetView = () => {
     const viewer = viewerRef.current;

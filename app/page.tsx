@@ -108,6 +108,9 @@ const optodeById = new Map(optodes.map((optode) => [optode.id, optode]));
 const channelById = new Map(channels.map((channel) => [channel.id, channel]));
 const shortChannels = channels.filter((channel) => channel.type === 'short');
 const shortDetectorIds = new Set(shortChannels.map((channel) => channel.detector));
+const sourceCount = optodes.filter((optode) => optode.type === 'source').length;
+const regularDetectorCount = optodes.filter((optode) => optode.type === 'detector' && !shortDetectorIds.has(optode.id)).length;
+const shortDetectorCount = shortDetectorIds.size;
 
 function flatPosition(optodeId: string) {
   return tracedPositions[tracedOptodeLabels[optodeId] ?? ''] ?? { x: 50, y: 50 };
@@ -158,7 +161,8 @@ function MontageExplorer() {
   const [view, setView] = useState<'2d' | '3d'>('2d');
   const [showLong, setShowLong] = useState(true);
   const [showShort, setShowShort] = useState(true);
-  const [showOptodes, setShowOptodes] = useState(true);
+  const [showSources, setShowSources] = useState(true);
+  const [showDetectors, setShowDetectors] = useState(true);
   const [region, setRegion] = useState('All regions');
   const [active, setActive] = useState<Channel>(channels[35]);
 
@@ -168,7 +172,7 @@ function MontageExplorer() {
   });
   const visibleRegular = visible.filter((channel) => channel.type === 'long');
   const visibleShort = new Map(visible.filter((channel) => channel.type === 'short').map((channel) => [channel.source, channel]));
-  const displayOptodes = optodes.filter((optode) => !shortDetectorIds.has(optode.id));
+  const displayOptodes = optodes.filter((optode) => !shortDetectorIds.has(optode.id) && (optode.type === 'source' ? showSources : showDetectors));
 
   return (
     <section className="section montage-section" id="montage">
@@ -183,12 +187,13 @@ function MontageExplorer() {
             <button type="button" role="tab" aria-selected={view === '2d'} className={view === '2d' ? 'active' : ''} onClick={() => setView('2d')}>2D montage</button>
             <button type="button" role="tab" aria-selected={view === '3d'} className={view === '3d' ? 'active' : ''} onClick={() => setView('3d')}>3D brain</button>
           </div>
-          <p>{view === '2d' ? 'Pixel-traced 10–20 schematic' : 'ICBM152 nonlinear asymmetric 2009c surface'}</p>
+          <p>{view === '2d' ? '10–20 schematic' : 'ICBM152 nonlinear asymmetric 2009c surface'}</p>
         </div>
         <div className="montage-controls">
           <button className={`layer-toggle long ${showLong ? 'active' : ''}`} onClick={() => setShowLong(!showLong)} aria-pressed={showLong}><span /> Regular channels <b>102</b></button>
           <button className={`layer-toggle short ${showShort ? 'active' : ''}`} onClick={() => setShowShort(!showShort)} aria-pressed={showShort}><span /> Short channels <b>32</b></button>
-          <button className={`layer-toggle optode ${showOptodes ? 'active' : ''}`} onClick={() => setShowOptodes(!showOptodes)} aria-pressed={showOptodes}><span /> Sources + detectors <b>92</b></button>
+          <button className={`layer-toggle source ${showSources ? 'active' : ''}`} onClick={() => setShowSources(!showSources)} aria-pressed={showSources}><span /> Sources <b>{sourceCount}</b></button>
+          <button className={`layer-toggle detector ${showDetectors ? 'active' : ''}`} onClick={() => setShowDetectors(!showDetectors)} aria-pressed={showDetectors}><span /> Detectors <b>{regularDetectorCount} regular</b><b>{shortDetectorCount} short-distance</b></button>
           <label className="region-filter"><span>Region</span><select value={region} onChange={(event) => setRegion(event.target.value)}><option>All regions</option>{regions.map((item) => <option key={item}>{item}</option>)}</select></label>
           <p className="visible-count">{visible.length} visible</p>
         </div>
@@ -205,7 +210,7 @@ function MontageExplorer() {
             {visibleRegular.map((channel) => (
               <button key={channel.id} className={`channel-line ${channel.type} ${active.id === channel.id ? 'selected' : ''}`} style={channelLineStyle(channel)} onMouseEnter={() => setActive(channel)} onFocus={() => setActive(channel)} onClick={() => setActive(channel)} aria-label={`${channel.id}, ${channel.source} to ${channel.detector}, ${channel.region}`} />
             ))}
-            {showOptodes && displayOptodes.map((optode) => {
+            {displayOptodes.map((optode) => {
               const point = flatPosition(optode.id);
               const pairedShort = optode.type === 'source' ? visibleShort.get(optode.id) : undefined;
               return (
@@ -214,7 +219,7 @@ function MontageExplorer() {
                 </span>
               );
             })}
-            {Array.from(visibleShort.values()).map((channel) => {
+            {showDetectors && Array.from(visibleShort.values()).map((channel) => {
               const point = flatPosition(channel.source);
               return <button key={channel.id} className={`short-channel-hit ${active.id === channel.id ? 'selected' : ''}`} style={{ left: `${point.x}%`, top: `${point.y}%` }} onMouseEnter={() => setActive(channel)} onFocus={() => setActive(channel)} onClick={() => setActive(channel)} aria-label={`${channel.id}, short channel ${channel.source} to ${channel.detector}, ${channel.region}`} />;
             })}
@@ -223,7 +228,8 @@ function MontageExplorer() {
               channels={visible}
               optodes={optodes}
               shortDetectorIds={shortDetectorIds}
-              showOptodes={showOptodes}
+              showSources={showSources}
+              showDetectors={showDetectors}
               activeChannelId={active.id}
               assetBasePath={assetBasePath}
               onSelect={(channelId) => {
