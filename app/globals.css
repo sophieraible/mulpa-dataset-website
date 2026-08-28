@@ -71,6 +71,9 @@ h1 { font-size: clamp(48px, 6.2vw, 88px); letter-spacing: -.065em; line-height: 
 .stat-grid dt { font-size: clamp(28px, 3vw, 42px); font-weight: 760; letter-spacing: -.04em; }
 .stat-grid dd { color: var(--muted); font-size: 13px; margin: 7px 0 0; }
 
+.dataset-overview { margin: 0 auto; max-width: 1440px; padding: 0 5vw 92px; }
+.dataset-overview img { display: block; height: auto; margin: 0 auto; max-width: 1320px; width: 100%; }
+
 .section { margin: 0 auto; max-width: 1320px; padding: 105px 5vw; }
 .montage-section { max-width: none; background: var(--ink); color: white; }
 .section-heading { align-items: end; display: grid; gap: 60px; grid-template-columns: 1fr 1fr; margin: 0 auto 44px; max-width: 1180px; }
@@ -203,7 +206,8 @@ tfoot th, tfoot td { background: #e8f2f6; border-bottom: 0; color: var(--ink); f
 .data-badge { background: #fce6de; border-radius: 999px; color: #a33c16; display: inline-flex; font-size: 9px; font-weight: 800; letter-spacing: .08em; padding: 5px 8px; text-transform: uppercase; }
 .data-badge.measured { background: #dff3f9; color: #006b8d; }
 .signal-toolbar h3 { display: inline; font-size: 18px; margin-left: 12px; }
-.signal-toolbar > p { color: var(--muted); font-size: 12px; margin: 0; }
+.signal-toolbar > p { color: var(--muted); display: grid; font-size: 12px; gap: 5px; margin: 0; text-align: right; }
+.short-channel-reference { color: var(--coral); font-weight: 750; }
 .signal-plot { display: grid; grid-template-columns: 150px 1fr; }
 .signal-plot canvas { display: block; width: 100%; }
 .signal-labels { display: grid; padding: 0 10px 0 24px; }

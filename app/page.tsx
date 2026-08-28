@@ -41,6 +41,7 @@ const motorExample = generatedData.motorExample as {
   time: number[];
   traces: SignalTrace[];
   channel: { id: string; source: string; detector: string; sourcePosition: string; detectorPosition: string };
+  shortChannel: { id: string; source: string; detector: string; sourcePosition: string; detectorPosition: string };
 };
 
 const authorNames = ['Sophie Raible', 'João Pereira', 'Foivos Kotsogiannis', 'Bruno Direito', 'Teresa Sousa', 'Manuela da Cunha Seiffert', 'Rik Lavicka', 'Vendija Skeltona', 'Daniëlle Evenblij', 'Assunta Ciarlo', 'Armin Heinecke', 'Jacqueline Gädtke', 'Zeus Tipado', 'David M. A. Mehler', 'Simon H. Kohl', 'Miguel Castelo-Branco', 'Rainer Goebel', 'Michael Lührs', 'Bettina Sorger'];
@@ -55,7 +56,7 @@ const taskNames: Record<string, string> = {
 };
 
 const traceColors: Record<string, string> = {
-  hbo: '#d62728', hbr: '#1f77b4', short: '#e84e10', ppg: '#7c3aed', hr: '#b45309',
+  hbo: '#d62728', hbr: '#1f77b4', shortHbo: '#d62728', shortHbr: '#1f77b4', ppg: '#7c3aed', hr: '#b45309',
   spo2: '#0f766e', resp: '#00857a', ecg: '#d97706', gsr: '#a855f7',
   emg: '#9333ea', temp: '#64748b',
 };
@@ -359,7 +360,7 @@ function SynchronizedSignals({ selectedSignals }: { selectedSignals: PhysiologyK
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const task: TaskSelection = 'motorAction';
   const selectedTask = taskCards.find((item) => item.key === task)!;
-  const traces = useMemo(() => motorExample.traces.filter((trace) => trace.key === 'hbo' || trace.key === 'hbr' || trace.key === 'short' || selectedSignals.includes(trace.key as PhysiologyKey)), [selectedSignals]);
+  const traces = useMemo(() => motorExample.traces.filter((trace) => trace.key === 'hbo' || trace.key === 'hbr' || trace.key === 'shortHbo' || trace.key === 'shortHbr' || selectedSignals.includes(trace.key as PhysiologyKey)), [selectedSignals]);
   const isMeasuredExample = task === 'motorAction';
 
   useEffect(() => {
@@ -384,10 +385,10 @@ function SynchronizedSignals({ selectedSignals }: { selectedSignals: PhysiologyK
       traces.forEach((trace, row) => {
         const values = isMeasuredExample ? trace.values : syntheticTrace(trace, task, motorExample.time);
         const baseline = rowHeight * row + rowHeight / 2;
-        context.strokeStyle = '#d8e0e7'; context.lineWidth = 1; context.beginPath(); context.moveTo(left, baseline); context.lineTo(width - right, baseline); context.stroke();
-        context.strokeStyle = traceColors[trace.key] || '#001c3d'; context.lineWidth = trace.key === 'hbo' || trace.key === 'hbr' ? 2.4 : 1.6; context.beginPath();
+        context.setLineDash([]); context.strokeStyle = '#d8e0e7'; context.lineWidth = 1; context.beginPath(); context.moveTo(left, baseline); context.lineTo(width - right, baseline); context.stroke();
+        context.strokeStyle = traceColors[trace.key] || '#001c3d'; context.lineWidth = trace.key === 'hbo' || trace.key === 'hbr' ? 2.4 : 1.6; context.setLineDash(trace.key.startsWith('short') ? [5, 3] : []); context.beginPath();
         values.forEach((value, index) => { const x = left + (index / (values.length - 1)) * plotWidth; const y = baseline - value * rowHeight * .33; if (index === 0) context.moveTo(x, y); else context.lineTo(x, y); });
-        context.stroke();
+        context.stroke(); context.setLineDash([]);
       });
     };
     draw();
@@ -399,7 +400,7 @@ function SynchronizedSignals({ selectedSignals }: { selectedSignals: PhysiologyK
       <div className="section signals-inner">
         <div className="section-heading light-heading"><div><p className="eyebrow">Synchronized example</p><h2>One timeline, many measures</h2></div><p>This example shows pre-processed fNIRS data for the motor-action task of one example subject. Select physiology measures above to show how they synchronize with fNIRS.</p></div>
         <div className="signal-card">
-          <div className="signal-toolbar"><div><span className={`data-badge ${isMeasuredExample ? 'measured' : ''}`}>{isMeasuredExample ? 'Measured SNIRF example' : 'Generated preview'}</span><h3>{selectedTask.name} · {isMeasuredExample ? motorExample.participant : 'interaction preview'}</h3></div><p>{isMeasuredExample ? `${motorExample.channel.id} · ${motorExample.channel.source}–${motorExample.channel.detector} · ${motorExample.channel.sourcePosition}–${motorExample.channel.detectorPosition}` : `${traces.length} synchronized traces`}</p></div>
+          <div className="signal-toolbar"><div><span className={`data-badge ${isMeasuredExample ? 'measured' : ''}`}>{isMeasuredExample ? 'Measured SNIRF example' : 'Generated preview'}</span><h3>{selectedTask.name} · {isMeasuredExample ? motorExample.participant : 'interaction preview'}</h3></div><p>{isMeasuredExample ? <><span>{motorExample.channel.id} · {motorExample.channel.source}–{motorExample.channel.detector} · {motorExample.channel.sourcePosition}–{motorExample.channel.detectorPosition}</span><span className="short-channel-reference">Short channel · {motorExample.shortChannel.id} · {motorExample.shortChannel.source}–{motorExample.shortChannel.detector}</span></> : `${traces.length} synchronized traces`}</p></div>
           <div className="signal-plot"><div className="signal-labels">{traces.map((trace) => <span key={trace.key}><i style={{ background: traceColors[trace.key] }} /><b>{trace.label}</b><small>{trace.unit}</small></span>)}</div><canvas ref={canvasRef} style={{ height: `${Math.max(300, traces.length * 64)}px` }} aria-label={`Synchronized ${selectedTask.name} fNIRS and physiology traces`} /></div>
           <div className="signal-axis"><span>−10 s</span><span>0 s</span><span>16 s</span><span>36 s</span></div>
           <p className="signal-note">Signals are normalized independently for visual comparison. The yellow band marks the selected task block.</p>
@@ -445,8 +446,11 @@ export default function Home() {
         <a className="button button-small" href="https://zenodo.org/records/21033499" target="_blank" rel="noreferrer">Open dataset</a>
       </header>
       <section className="hero" id="top">
-        <div><p className="eyebrow">A multiple-paradigm physiology-rich fNIRS resource</p><h1>The MULPA dataset</h1><p className="author-list">{authorNames.map((name, index) => <span key={name}>{name}{index < 2 && <sup>*</sup>}{index < authorNames.length - 2 ? ', ' : index === authorNames.length - 2 ? ', and ' : ''}</span>)}</p><div className="author-notes"><span><sup>*</sup> Shared first authors</span><a href="mailto:sp.raible@maastrichtuniversity.nl">Correspondence: sp.raible@maastrichtuniversity.nl</a></div><p className="hero-copy">MULPA pairs near-whole-head fNIRS with extensive short-separation coverage and synchronized systemic physiology across motor, affective, perceptual, music, and resting-state paradigms.</p><div className="hero-actions"><a className="button" href="#montage">Explore the montage</a><a className="text-link" href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1" target="_blank" rel="noreferrer">Read the preprint <span aria-hidden="true">↗</span></a></div></div>
+        <div><p className="eyebrow">A multiple-paradigm physiology-rich fNIRS resource</p><h1>The MULPA dataset</h1><p className="author-list">{authorNames.map((name, index) => <span key={name}>{name}{index < 2 && <sup>*</sup>}{index < authorNames.length - 2 ? ', ' : index === authorNames.length - 2 ? ', and ' : ''}</span>)}</p><div className="author-notes"><span><sup>*</sup> Shared first authors</span><a href="mailto:sp.raible@maastrichtuniversity.nl">Correspondence: sp.raible@maastrichtuniversity.nl</a></div><p className="hero-copy">MULPA is an open resource from 57 participants that combines near-whole-head fNIRS—134 measurement channels including 32 short-separation channels—with a broad, seven-task battery. The release brings cortical signals together with synchronized cardiovascular, respiratory, electrodermal, muscular, behavioural, and self-report measures on shared timelines: a rich foundation for studying brain responses, systemic physiology, signal quality, and their interactions.</p><div className="hero-actions"><a className="button" href="#montage">Explore the montage</a><a className="text-link" href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1" target="_blank" rel="noreferrer">Read the preprint <span aria-hidden="true">↗</span></a></div></div>
         <dl className="stat-grid"><div><dt>57</dt><dd>participants</dd></div><div><dt>134</dt><dd>fNIRS channels</dd></div><div><dt>32</dt><dd>short channels</dd></div><div><dt>7</dt><dd>different tasks</dd></div><div><dt>12.6 Hz</dt><dd>sampling rate</dd></div><div><dt>30+ h</dt><dd>recordings</dd></div></dl>
+      </section>
+      <section className="dataset-overview" aria-label="MULPA dataset overview">
+        <img src={`${assetBasePath}/mulpa-dataset-overview.png`} alt="Overview of the MULPA dataset: fNIRS, synchronized physiology, a broad task battery, and behavioural measures in 57 participants." />
       </section>
       <MontageExplorer />
       <ParticipantExplorer />

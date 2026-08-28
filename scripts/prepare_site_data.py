@@ -161,10 +161,12 @@ def read_snirf(optodes: list[dict]) -> tuple[list[dict], dict]:
         nirs_values = np.asarray(data["dataTimeSeries"][:], dtype=float)
         long_hbo_column = column_by_pair_and_label[(tuple(long_channel["pair"]), "HbO")]
         long_hbr_column = column_by_pair_and_label[(tuple(long_channel["pair"]), "HbR")]
-        short_column = column_by_pair_and_label[(tuple(short_channel["pair"]), "HbO")]
+        short_hbo_column = column_by_pair_and_label[(tuple(short_channel["pair"]), "HbO")]
+        short_hbr_column = column_by_pair_and_label[(tuple(short_channel["pair"]), "HbR")]
         long_hbo = np.interp(sample_time, nirs_time, nirs_values[:, long_hbo_column])
         long_hbr = np.interp(sample_time, nirs_time, nirs_values[:, long_hbr_column])
-        short_hbo = np.interp(sample_time, nirs_time, nirs_values[:, short_column])
+        short_hbo = np.interp(sample_time, nirs_time, nirs_values[:, short_hbo_column])
+        short_hbr = np.interp(sample_time, nirs_time, nirs_values[:, short_hbr_column])
 
         aux_by_name = {}
         for name in nirs:
@@ -175,7 +177,8 @@ def read_snirf(optodes: list[dict]) -> tuple[list[dict], dict]:
         trace_sources = [
             ("hbo", f"{long_channel['id']} · HbO", "z", long_hbo),
             ("hbr", f"{long_channel['id']} · HbR", "z", long_hbr),
-            ("short", f"{short_channel['id']} HbO", "z", short_hbo),
+            ("shortHbo", f"Short {short_channel['id']} · HbO", "z", short_hbo),
+            ("shortHbr", f"Short {short_channel['id']} · HbR", "z", short_hbr),
             ("ppg", "PPG", "ADU", interpolate(aux_by_name["PPG"], sample_time)),
             ("resp", "Respiration", "Ohm", interpolate(aux_by_name["Respiration"], sample_time)),
             ("ecg", "ECG", "V", interpolate(aux_by_name["ECG"], sample_time)),
@@ -195,6 +198,13 @@ def read_snirf(optodes: list[dict]) -> tuple[list[dict], dict]:
                 "detector": long_channel["detector"],
                 "sourcePosition": next(item["position"] for item in optodes if item["id"] == long_channel["source"]),
                 "detectorPosition": next(item["position"] for item in optodes if item["id"] == long_channel["detector"]),
+            },
+            "shortChannel": {
+                "id": short_channel["id"],
+                "source": short_channel["source"],
+                "detector": short_channel["detector"],
+                "sourcePosition": next(item["position"] for item in optodes if item["id"] == short_channel["source"]),
+                "detectorPosition": next(item["position"] for item in optodes if item["id"] == short_channel["detector"]),
             },
             "eventOnset": 0,
             "eventDuration": round(event_duration, 1),
