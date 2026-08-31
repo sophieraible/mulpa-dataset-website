@@ -97,7 +97,6 @@ h1 { font-size: clamp(48px, 6.2vw, 88px); letter-spacing: -.065em; line-height: 
 .layer-toggle.active.short span { background: var(--coral); }
 .layer-toggle.active.source span { background: #ef2b2d; }
 .layer-toggle.active.detector span { background: #2f85bd; }
-.layer-toggle.active.sensitivity span { background: linear-gradient(135deg, #1425d8, #00e5d1 42%, #f3ff28 62%, #ec1010); }
 .montage-layout { display: grid; grid-template-columns: minmax(560px, 1fr) 370px; min-height: 790px; }
 .head-map { align-self: center; aspect-ratio: 1; background: white; justify-self: center; position: relative; width: min(88%, 690px); }
 .head-outline { height: 100%; inset: 0; overflow: visible; pointer-events: none; position: absolute; width: 100%; z-index: 0; }
@@ -147,8 +146,6 @@ code { background: #ece9e1; border-radius: 4px; font-family: var(--font-geist-mo
 .brain-viewer-guide span { align-items: center; color: #66766f; display: flex; font-size: 10px; gap: 7px; }
 .brain-viewer-guide button { background: var(--ink); border: 0; border-radius: 999px; color: white; cursor: pointer; font-size: 10px; padding: 7px 10px; }
 .brain-viewer-guide button:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
-.sensitivity-legend { align-items: center; background: rgba(255,255,255,.9); border: 1px solid rgba(195,204,198,.9); border-radius: 999px; color: #66766f; display: flex; font-size: 10px; gap: 7px; padding: 7px 10px; position: absolute; right: 20px; top: 20px; z-index: 3; }
-.sensitivity-legend i { background: linear-gradient(90deg, #1425d8, #00e5d1 42%, #f3ff28 62%, #ec1010); border-radius: 999px; height: 8px; width: 56px; }
 .mouse-icon { border: 1.5px solid #66766f; border-radius: 5px; height: 15px; position: relative; width: 10px; }
 .mouse-icon::after { background: #66766f; border-radius: 2px; content: ''; height: 4px; left: 3px; position: absolute; top: 2px; width: 2px; }
 .brain-load-state { align-items: center; background: rgba(246,248,245,.92); color: var(--muted); display: flex; font-size: 12px; inset: 0; justify-content: center; position: absolute; z-index: 2; }

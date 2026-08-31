@@ -23,7 +23,6 @@ type BrainMontage3DProps = {
   shortDetectorIds: Set<string>;
   showSources: boolean;
   showDetectors: boolean;
-  showSensitivity: boolean;
   activeChannelId: string;
   assetBasePath: string;
   onSelect: (channelId: string) => void;
@@ -34,22 +33,12 @@ type ViewerRefs = {
   controls: OrbitControls;
   montage: THREE.Group;
   scene: THREE.Scene;
-  brain: THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial> | null;
 };
 
 const CAMERA_POSITION = new THREE.Vector3(0, 34, 360);
 const CAMERA_TARGET = new THREE.Vector3(0, 15, 0);
 const HEAD_CENTER = new THREE.Vector3(0, 12, 0);
 const RING_AXIS = new THREE.Vector3(0, 0, 1);
-const SENSITIVITY_CUTOFF = 0.25;
-const SENSITIVITY_STOPS = [
-  { value: 0, color: '#1425d8' },
-  { value: 0.24, color: '#00a9ff' },
-  { value: 0.42, color: '#00e5d1' },
-  { value: 0.62, color: '#f3ff28' },
-  { value: 0.80, color: '#ff9800' },
-  { value: 1, color: '#ec1010' },
-];
 
 function mniToThree(mni: number[]) {
   return new THREE.Vector3(mni[0], mni[2], mni[1]);
@@ -83,59 +72,12 @@ function geometryFromSurface(buffer: ArrayBuffer, label: string) {
   return geometry;
 }
 
-function sensitivityValuesFromBuffer(buffer: ArrayBuffer, vertexCount: number) {
-  if (buffer.byteLength !== vertexCount * 4) {
-    throw new Error(`Sensitivity profile has ${buffer.byteLength / 4} values; expected ${vertexCount}`);
-  }
-  const values = new Float32Array(buffer);
-  if (Array.from(values).some((value) => !Number.isFinite(value))) {
-    throw new Error('Sensitivity profile contains non-finite values');
-  }
-  return values;
-}
-
-function sensitivityColors(values: Float32Array) {
-  const neutral = new THREE.Color('#aba8a1');
-  const stops = SENSITIVITY_STOPS.map((stop) => ({ ...stop, color: new THREE.Color(stop.color) }));
-  const color = new THREE.Color();
-  const colors = new Float32Array(values.length * 3);
-  values.forEach((storedValue, index) => {
-    // The Satori SMP stores inverse-normalized values: lower values are closer
-    // to the optodes and therefore represent higher cortical sensitivity.
-    const sensitivity = 1 - storedValue;
-    const scaled = (sensitivity - SENSITIVITY_CUTOFF) / (1 - SENSITIVITY_CUTOFF);
-    if (scaled <= 0) {
-      color.copy(neutral);
-    } else {
-      const position = THREE.MathUtils.clamp(scaled, 0, 1);
-      const upperIndex = stops.findIndex((stop) => position <= stop.value);
-      const upper = stops[Math.max(upperIndex, 1)];
-      const lower = stops[Math.max(upperIndex - 1, 0)];
-      color.copy(lower.color).lerp(upper.color, (position - lower.value) / (upper.value - lower.value));
-    }
-    colors[index * 3] = color.r;
-    colors[index * 3 + 1] = color.g;
-    colors[index * 3 + 2] = color.b;
-  });
-  return colors;
-}
-
-function setSensitivityVisibility(
-  brain: THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial>,
-  visible: boolean,
-) {
-  brain.material.vertexColors = visible;
-  brain.material.color.set(visible ? '#ffffff' : '#d8d1c8');
-  brain.material.needsUpdate = true;
-}
-
 export default function BrainMontage3D({
   channels,
   optodes,
   shortDetectorIds,
   showSources,
   showDetectors,
-  showSensitivity,
   activeChannelId,
   assetBasePath,
   onSelect,
@@ -143,19 +85,12 @@ export default function BrainMontage3D({
   const hostRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<ViewerRefs | null>(null);
   const selectRef = useRef(onSelect);
-  const sensitivityVisibilityRef = useRef(showSensitivity);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [hoveredChannelId, setHoveredChannelId] = useState<string | null>(null);
 
   useEffect(() => {
     selectRef.current = onSelect;
   }, [onSelect]);
-
-  useEffect(() => {
-    sensitivityVisibilityRef.current = showSensitivity;
-    const brain = viewerRef.current?.brain;
-    if (brain) setSensitivityVisibility(brain, showSensitivity);
-  }, [showSensitivity]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -191,7 +126,7 @@ export default function BrainMontage3D({
 
     const montage = new THREE.Group();
     scene.add(montage);
-    viewerRef.current = { camera, controls, montage, scene, brain: null };
+    viewerRef.current = { camera, controls, montage, scene };
 
     const abortController = new AbortController();
     const loadSurface = (filename: string) => fetch(`${assetBasePath}/${filename}`, { signal: abortController.signal })
@@ -200,17 +135,11 @@ export default function BrainMontage3D({
         return response.arrayBuffer();
       });
 
-    Promise.all([loadSurface('brain-surface.bin'), loadSurface('scalp-surface.bin'), loadSurface('sensitivity-profile.bin')])
-      .then(([brainBuffer, scalpBuffer, sensitivityBuffer]) => {
+    Promise.all([loadSurface('brain-surface.bin'), loadSurface('scalp-surface.bin')])
+      .then(([brainBuffer, scalpBuffer]) => {
         if (abortController.signal.aborted) return;
-        const brainGeometry = geometryFromSurface(brainBuffer, 'brain');
-        const sensitivity = sensitivityValuesFromBuffer(
-          sensitivityBuffer,
-          brainGeometry.getAttribute('position').count,
-        );
-        brainGeometry.setAttribute('color', new THREE.BufferAttribute(sensitivityColors(sensitivity), 3));
         const brain = new THREE.Mesh(
-          brainGeometry,
+          geometryFromSurface(brainBuffer, 'brain'),
           new THREE.MeshStandardMaterial({
             color: '#d8d1c8',
             roughness: 0.86,
@@ -222,8 +151,6 @@ export default function BrainMontage3D({
         brain.name = 'ICBM152 brain surface';
         brain.renderOrder = 0;
         scene.add(brain);
-        if (viewerRef.current) viewerRef.current.brain = brain;
-        setSensitivityVisibility(brain, sensitivityVisibilityRef.current);
 
         const scalp = new THREE.Mesh(
           geometryFromSurface(scalpBuffer, 'scalp'),
@@ -415,9 +342,8 @@ export default function BrainMontage3D({
   };
 
   return (
-    <div className="brain-viewer" role="img" aria-label={`Interactive 3D ICBM152 brain with the MULPA optode montage${showSensitivity ? ' and cortical sensitivity profile' : ''}`}>
+    <div className="brain-viewer" role="img" aria-label="Interactive 3D ICBM152 brain with the MULPA optode montage">
       <div className="brain-canvas" ref={hostRef} />
-      {status === 'ready' && showSensitivity && <div className="sensitivity-legend" aria-label="Sensitivity profile color scale: low to high"><span>Low sensitivity</span><i aria-hidden="true" /><span>High</span></div>}
       <div className="brain-viewer-guide">
         <span><i className="mouse-icon" aria-hidden="true" /> Drag to rotate · scroll to zoom · hover and click a channel</span>
         <button type="button" onClick={resetView}>Reset view</button>

@@ -166,7 +166,6 @@ function MontageExplorer() {
   const [showShort, setShowShort] = useState(true);
   const [showSources, setShowSources] = useState(true);
   const [showDetectors, setShowDetectors] = useState(true);
-  const [showSensitivity, setShowSensitivity] = useState(false);
   const [brodmannArea, setBrodmannArea] = useState('All areas');
   const [active, setActive] = useState<Channel>(channels[35]);
 
@@ -198,7 +197,6 @@ function MontageExplorer() {
           <button className={`layer-toggle short ${showShort ? 'active' : ''}`} onClick={() => setShowShort(!showShort)} aria-pressed={showShort}><span /> Short channels <b>32</b></button>
           <button className={`layer-toggle source ${showSources ? 'active' : ''}`} onClick={() => setShowSources(!showSources)} aria-pressed={showSources}><span /> Sources <b>{sourceCount}</b></button>
           <button className={`layer-toggle detector ${showDetectors ? 'active' : ''}`} onClick={() => setShowDetectors(!showDetectors)} aria-pressed={showDetectors}><span /> Detectors <b>{regularDetectorCount} regular</b><b>{shortDetectorCount} short-distance</b></button>
-          {view === '3d' && <button className={`layer-toggle sensitivity ${showSensitivity ? 'active' : ''}`} onClick={() => setShowSensitivity(!showSensitivity)} aria-pressed={showSensitivity}><span /> Cortical sensitivity</button>}
           <label className="region-filter"><span>Brodmann area</span><select value={brodmannArea} onChange={(event) => setBrodmannArea(event.target.value)}><option>All areas</option>{brodmannAreas.map((item) => <option key={item}>{item}</option>)}</select></label>
           <p className="visible-count">{visible.length} visible</p>
         </div>
@@ -235,7 +233,6 @@ function MontageExplorer() {
               shortDetectorIds={shortDetectorIds}
               showSources={showSources}
               showDetectors={showDetectors}
-              showSensitivity={showSensitivity}
               activeChannelId={active.id}
               assetBasePath={assetBasePath}
               onSelect={(channelId) => {
