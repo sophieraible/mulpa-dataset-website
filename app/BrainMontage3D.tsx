@@ -99,8 +99,11 @@ function sensitivityColors(values: Float32Array) {
   const stops = SENSITIVITY_STOPS.map((stop) => ({ ...stop, color: new THREE.Color(stop.color) }));
   const color = new THREE.Color();
   const colors = new Float32Array(values.length * 3);
-  values.forEach((value, index) => {
-    const scaled = (value - SENSITIVITY_CUTOFF) / (1 - SENSITIVITY_CUTOFF);
+  values.forEach((storedValue, index) => {
+    // The Satori SMP stores inverse-normalized values: lower values are closer
+    // to the optodes and therefore represent higher cortical sensitivity.
+    const sensitivity = 1 - storedValue;
+    const scaled = (sensitivity - SENSITIVITY_CUTOFF) / (1 - SENSITIVITY_CUTOFF);
     if (scaled <= 0) {
       color.copy(neutral);
     } else {

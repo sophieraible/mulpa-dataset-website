@@ -59,6 +59,7 @@ def main() -> None:
         "vertexCount": int(len(values)),
         "valueRange": [float(values.min()), float(values.max())],
         "surface": surface_name,
+        "webDisplayTransform": "sensitivity = 1 - storedValue",
         "cutoff": 0.25,
         "palette": {
             "neutral": "#aba8a1",
