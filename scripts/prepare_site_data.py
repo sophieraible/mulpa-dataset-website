@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OPTODES = Path(r"D:\mulpa\mulpa_bids_4publication\sub-01\nirs\sub-01_optodes.tsv")
 SNIRF = Path(r"D:\mulpa\mulpa_preproc\sub-01\nirs\sub-01_task-motoraction_nirs_preproc_4glm.snirf")
 QC = Path(r"C:\Users\P70091213\Downloads\QA - MULPA Dataset - qc_final.csv")
+ATLASVIEWER_LABELS = ROOT / "data" / "atlasviewer-channel-labels.csv"
 OUTPUT = ROOT / "app" / "derived-data.json"
 
 
@@ -49,33 +50,16 @@ def read_optodes() -> list[dict]:
     return optodes
 
 
-def region_for_channel(x: float, y: float, z: float) -> str:
-    """Broad cortical approximation from the channel midpoint in MNI space.
-
-    The sidecar specifies a coordinate template, not a parcellation. These labels
-    intentionally stay broad until authoritative fOLD output is available.
-    """
-    side = "Left" if x < -8 else "Right" if x > 8 else "Medial"
-    lateral = abs(x)
-
-    if y > 63:
-        area = "frontal pole"
-    elif y > 30:
-        area = "superior frontal gyrus" if z > 55 else "middle frontal gyrus"
-    elif y > 2:
-        area = "precentral gyrus" if z > 55 else "inferior frontal gyrus"
-    elif y > -32:
-        if lateral > 62 and z < 48:
-            area = "superior temporal gyrus"
-        else:
-            area = "postcentral gyrus" if y < -12 else "precentral gyrus"
-    elif y > -70:
-        area = "superior parietal lobule" if z > 58 else "middle temporal gyrus"
-    elif z > 60:
-        area = "superior occipital gyrus"
-    else:
-        area = "middle occipital gyrus"
-    return f"{side} {area}"
+def read_atlasviewer_labels() -> dict[tuple[str, str], str]:
+    """Read AAL labels exported by AtlasViewer's Project Probe To Cortex tool."""
+    labels: dict[tuple[str, str], str] = {}
+    with ATLASVIEWER_LABELS.open(encoding="utf-8-sig", newline="") as handle:
+        for row in csv.DictReader(handle):
+            pair = (f"S{row['Src'].strip()}", f"D{row['Det'].strip()}")
+            if pair in labels:
+                raise ValueError(f"Duplicate AtlasViewer label for {pair[0]}–{pair[1]}")
+            labels[pair] = row["label"].strip()
+    return labels
 
 
 def normalized(values: np.ndarray) -> np.ndarray:
@@ -93,7 +77,7 @@ def interpolate(group: h5py.Group, target_time: np.ndarray) -> np.ndarray:
     return np.interp(target_time, time, values)
 
 
-def read_snirf(optodes: list[dict]) -> tuple[list[dict], dict]:
+def read_snirf(optodes: list[dict], atlasviewer_labels: dict[tuple[str, str], str]) -> tuple[list[dict], dict]:
     numeric_id = lambda item: int(item["id"][1:])
     sources = sorted((item for item in optodes if item["type"] == "source"), key=numeric_id)
     detectors = sorted((item for item in optodes if item["type"] == "detector"), key=numeric_id)
@@ -131,6 +115,9 @@ def read_snirf(optodes: list[dict]) -> tuple[list[dict], dict]:
             midpoint = (source_mni + detector_mni) / 2
             distance = float(np.linalg.norm(source_mni - detector_mni))
             channel_type = "short" if distance < 15 else "long"
+            atlasviewer_label = atlasviewer_labels.get((source["id"], detector["id"]))
+            if atlasviewer_label is None:
+                raise ValueError(f"Missing AtlasViewer label for {source['id']}–{detector['id']}")
             channels.append(
                 {
                     "id": f"Ch-{len(channels) + 1:03d}",
@@ -141,7 +128,7 @@ def read_snirf(optodes: list[dict]) -> tuple[list[dict], dict]:
                     "x": round((source["x"] + detector["x"]) / 2, 2),
                     "y": round((source["y"] + detector["y"]) / 2, 2),
                     "mni": [round(float(value), 1) for value in midpoint],
-                    "region": region_for_channel(*midpoint),
+                    "region": atlasviewer_label,
                     "pair": pair,
                 }
             )
@@ -259,9 +246,16 @@ def read_qc() -> list[dict]:
 
 def main() -> None:
     optodes = read_optodes()
-    channels, signal = read_snirf(optodes)
+    atlasviewer_labels = read_atlasviewer_labels()
+    channels, signal = read_snirf(optodes, atlasviewer_labels)
     payload = {
         "coordinateSystem": "MNI152NLin2009aSym",
+        "anatomicalLabels": {
+            "source": "AtlasViewer projection export",
+            "atlas": "Colin27",
+            "parcellation": "AAL",
+            "coordinateSpace": "MNI",
+        },
         "optodes": optodes,
         "channels": channels,
         "motorExample": signal,

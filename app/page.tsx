@@ -194,7 +194,7 @@ function MontageExplorer() {
           <button className={`layer-toggle short ${showShort ? 'active' : ''}`} onClick={() => setShowShort(!showShort)} aria-pressed={showShort}><span /> Short channels <b>32</b></button>
           <button className={`layer-toggle source ${showSources ? 'active' : ''}`} onClick={() => setShowSources(!showSources)} aria-pressed={showSources}><span /> Sources <b>{sourceCount}</b></button>
           <button className={`layer-toggle detector ${showDetectors ? 'active' : ''}`} onClick={() => setShowDetectors(!showDetectors)} aria-pressed={showDetectors}><span /> Detectors <b>{regularDetectorCount} regular</b><b>{shortDetectorCount} short-distance</b></button>
-          <label className="region-filter"><span>Region</span><select value={region} onChange={(event) => setRegion(event.target.value)}><option>All regions</option>{regions.map((item) => <option key={item}>{item}</option>)}</select></label>
+          <label className="region-filter"><span>AAL region</span><select value={region} onChange={(event) => setRegion(event.target.value)}><option>All regions</option>{regions.map((item) => <option key={item}>{item}</option>)}</select></label>
           <p className="visible-count">{visible.length} visible</p>
         </div>
 
@@ -242,8 +242,8 @@ function MontageExplorer() {
           <aside className="channel-inspector" aria-live="polite">
             <p className="inspector-label">Selected channel</p>
             <div className="channel-title"><span className={`channel-swatch ${active.type}`} /><h3>{active.id}</h3><span className="channel-type">{active.type === 'short' ? 'Short' : 'Regular'}</span></div>
-            <dl><div><dt>Source–detector pair</dt><dd>{active.source} – {active.detector}</dd></div><div><dt>10–20 reference</dt><dd>{active.type === 'short' ? optodeReference(active.source) : `${optodeReference(active.source)} – ${optodeReference(active.detector)}`}</dd></div><div><dt>Distance</dt><dd>{active.distance} mm</dd></div><div><dt>Midpoint</dt><dd>{active.mni.join(', ')} mm</dd></div><div><dt>Anatomical region</dt><dd>{active.region}</dd></div></dl>
-            <p className="provisional-note"><strong>Atlas note.</strong> Positions and pairs come from the supplied BIDS/SNIRF files. The sidecar specifies MNI space, but no cortical parcellation; region names are broad approximations until authoritative fOLD output is supplied.</p>
+            <dl><div><dt>Source–detector pair</dt><dd>{active.source} – {active.detector}</dd></div><div><dt>10–20 reference</dt><dd>{active.type === 'short' ? optodeReference(active.source) : `${optodeReference(active.source)} – ${optodeReference(active.detector)}`}</dd></div><div><dt>Distance</dt><dd>{active.distance} mm</dd></div><div><dt>Midpoint</dt><dd>{active.mni.join(', ')} mm</dd></div><div><dt>AtlasViewer AAL label</dt><dd>{active.region}</dd></div></dl>
+            <p className="provisional-note"><strong>Atlas note.</strong> Anatomical labels are AAL assignments from the supplied <a href="https://github.com/BUNPC/AtlasViewer/wiki/Getting-MNI-coordinates-of-Probe-Projection-to-Cortex" target="_blank" rel="noreferrer">AtlasViewer</a> projection export. AtlasViewer’s default atlas is Colin27; source–detector pairs and displayed midpoints remain from the supplied BIDS/SNIRF data.</p>
           </aside>
         </div>
       </div>
@@ -498,7 +498,7 @@ export default function Home() {
       <footer>
         <div><a className="brand" href="#top"><img className="footer-logo" src={`${assetBasePath}/maastricht-university-logo-white.png`} alt="Maastricht University" /></a></div>
         <div className="footer-links"><a href="https://zenodo.org/records/21033499" target="_blank" rel="noreferrer">Dataset ↗</a><a href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1" target="_blank" rel="noreferrer">Preprint ↗</a></div>
-        <div className="footer-meta"><p className="license">BIDS 1.11.1 · SNIRF · CC BY-NC 4.0</p><p className="prototype-note">MNI region labels remain provisional until fOLD output is available.</p><p className="prototype-note">Website created by Sophie Raible using Codex (GPT-5).</p><p className="site-version">Last updated: {formattedLastUpdated}</p></div>
+        <div className="footer-meta"><p className="license">BIDS 1.11.1 · SNIRF · CC BY-NC 4.0</p><p className="prototype-note">Anatomical labels: AAL parcels from the supplied <a href="https://github.com/BUNPC/AtlasViewer/wiki/Getting-MNI-coordinates-of-Probe-Projection-to-Cortex" target="_blank" rel="noreferrer">AtlasViewer</a> Colin27 projection export.</p><p className="prototype-note">Website created by Sophie Raible using Codex (GPT-5).</p><p className="site-version">Last updated: {formattedLastUpdated}</p></div>
       </footer>
     </main>
   );
