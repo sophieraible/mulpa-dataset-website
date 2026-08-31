@@ -166,6 +166,7 @@ function MontageExplorer() {
   const [showShort, setShowShort] = useState(true);
   const [showSources, setShowSources] = useState(true);
   const [showDetectors, setShowDetectors] = useState(true);
+  const [showSensitivity, setShowSensitivity] = useState(false);
   const [brodmannArea, setBrodmannArea] = useState('All areas');
   const [active, setActive] = useState<Channel>(channels[35]);
 
@@ -197,6 +198,7 @@ function MontageExplorer() {
           <button className={`layer-toggle short ${showShort ? 'active' : ''}`} onClick={() => setShowShort(!showShort)} aria-pressed={showShort}><span /> Short channels <b>32</b></button>
           <button className={`layer-toggle source ${showSources ? 'active' : ''}`} onClick={() => setShowSources(!showSources)} aria-pressed={showSources}><span /> Sources <b>{sourceCount}</b></button>
           <button className={`layer-toggle detector ${showDetectors ? 'active' : ''}`} onClick={() => setShowDetectors(!showDetectors)} aria-pressed={showDetectors}><span /> Detectors <b>{regularDetectorCount} regular</b><b>{shortDetectorCount} short-distance</b></button>
+          {view === '3d' && <button className={`layer-toggle sensitivity ${showSensitivity ? 'active' : ''}`} onClick={() => setShowSensitivity(!showSensitivity)} aria-pressed={showSensitivity}><span /> Cortical sensitivity</button>}
           <label className="region-filter"><span>Brodmann area</span><select value={brodmannArea} onChange={(event) => setBrodmannArea(event.target.value)}><option>All areas</option>{brodmannAreas.map((item) => <option key={item}>{item}</option>)}</select></label>
           <p className="visible-count">{visible.length} visible</p>
         </div>
@@ -233,6 +235,7 @@ function MontageExplorer() {
               shortDetectorIds={shortDetectorIds}
               showSources={showSources}
               showDetectors={showDetectors}
+              showSensitivity={showSensitivity}
               activeChannelId={active.id}
               assetBasePath={assetBasePath}
               onSelect={(channelId) => {
@@ -485,7 +488,7 @@ export default function Home() {
         <a className="button button-small" href="https://zenodo.org/records/21033499" target="_blank" rel="noreferrer">Open dataset</a>
       </header>
       <section className="hero" id="top">
-        <div><p className="eyebrow">A multiple-paradigm physiology-rich fNIRS resource</p><h1>The MULPA dataset</h1><p className="author-list">{authorNames.map((name, index) => <span key={name}>{name}{index < 2 && <sup>*</sup>}{index < authorNames.length - 2 ? ', ' : index === authorNames.length - 2 ? ', and ' : ''}</span>)}</p><div className="author-notes"><span><sup>*</sup> Shared first authors</span><a href="mailto:sp.raible@maastrichtuniversity.nl">Correspondence: sp.raible@maastrichtuniversity.nl</a></div><p className="hero-copy">MULPA is an openly available dataset of 57 participants combining near-whole-head functional near-infrared spectroscopy (fNIRS) recordings of a broad, seven-task battery with extensive physiological measurements. The release brings cortical signals together with synchronized cardiovascular, respiratory, electrodermal, muscular, behavioural, and self-report measures on shared timelines and presents a rich foundation for studying brain responses, systemic physiology, signal quality, and their interactions.</p><div className="hero-actions"><a className="button" href="#montage">Explore the montage</a><a className="text-link" href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1" target="_blank" rel="noreferrer">Read the preprint <span aria-hidden="true">↗</span></a></div></div>
+        <div><p className="eyebrow">A multiple-paradigm physiology-rich fNIRS resource</p><h1>The MULPA dataset</h1><p className="author-list">{authorNames.map((name, index) => <span key={name}>{name}{index < 2 && <sup>*</sup>}{index < authorNames.length - 2 ? ', ' : index === authorNames.length - 2 ? ', and ' : ''}</span>)}</p><div className="author-notes"><span><sup>*</sup> Shared first authors</span><a href="mailto:sp.raible@maastrichtuniversity.nl">Correspondence: sp.raible@maastrichtuniversity.nl</a></div><p className="hero-copy">MULPA is an openly available dataset of 57 participants combining near-whole-head <strong>functional near-infrared spectroscopy (fNIRS)</strong> recordings of a broad, seven-task battery with extensive physiological measurements. The release brings cortical signals together with synchronized cardiovascular, respiratory, electrodermal, muscular, behavioural, and self-report measures on shared timelines and presents a rich foundation for studying brain responses, systemic physiology, signal quality, and their interactions.</p><div className="hero-actions"><a className="button" href="#montage">Explore the montage</a><a className="text-link" href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1" target="_blank" rel="noreferrer">Read the preprint <span aria-hidden="true">↗</span></a></div></div>
         <dl className="stat-grid"><div><dt>57</dt><dd>participants</dd></div><div><dt>134</dt><dd>fNIRS channels</dd></div><div><dt>32</dt><dd>short channels</dd></div><div><dt>7</dt><dd>different tasks</dd></div><div><dt>12.6 Hz</dt><dd>sampling rate</dd></div><div><dt>30+ h</dt><dd>recordings</dd></div></dl>
       </section>
       <section className="dataset-overview" aria-label="MULPA dataset overview">
