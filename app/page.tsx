@@ -22,6 +22,7 @@ type Channel = {
   source: string;
   detector: string;
   region: string;
+  brodmannArea?: string;
   distance: number;
   mni: number[];
 };
@@ -42,7 +43,9 @@ type QcMeasure = 'resp' | 'hr' | 'ppg' | 'ecg' | 'emg' | 'gsr';
 
 const channels = generatedData.channels as Channel[];
 const optodes = generatedData.optodes as Optode[];
-const regions = Array.from(new Set(channels.map((channel) => channel.region))).sort();
+const brodmannAreas = Array.from(new Set(
+  channels.flatMap((channel) => channel.brodmannArea ? [channel.brodmannArea] : []),
+)).sort((left, right) => left.localeCompare(right, undefined, { numeric: true, sensitivity: 'base' }));
 const motorExample = generatedData.motorExample as {
   participant: string;
   eventDuration: number;
@@ -163,12 +166,12 @@ function MontageExplorer() {
   const [showShort, setShowShort] = useState(true);
   const [showSources, setShowSources] = useState(true);
   const [showDetectors, setShowDetectors] = useState(true);
-  const [region, setRegion] = useState('All regions');
+  const [brodmannArea, setBrodmannArea] = useState('All areas');
   const [active, setActive] = useState<Channel>(channels[35]);
 
   const visible = channels.filter((channel) => {
     const typeIsVisible = channel.type === 'long' ? showLong : showShort;
-    return typeIsVisible && (region === 'All regions' || channel.region === region);
+    return typeIsVisible && (brodmannArea === 'All areas' || channel.brodmannArea === brodmannArea);
   });
   const visibleRegular = visible.filter((channel) => channel.type === 'long');
   const visibleShort = new Map(visible.filter((channel) => channel.type === 'short').map((channel) => [channel.source, channel]));
@@ -194,7 +197,7 @@ function MontageExplorer() {
           <button className={`layer-toggle short ${showShort ? 'active' : ''}`} onClick={() => setShowShort(!showShort)} aria-pressed={showShort}><span /> Short channels <b>32</b></button>
           <button className={`layer-toggle source ${showSources ? 'active' : ''}`} onClick={() => setShowSources(!showSources)} aria-pressed={showSources}><span /> Sources <b>{sourceCount}</b></button>
           <button className={`layer-toggle detector ${showDetectors ? 'active' : ''}`} onClick={() => setShowDetectors(!showDetectors)} aria-pressed={showDetectors}><span /> Detectors <b>{regularDetectorCount} regular</b><b>{shortDetectorCount} short-distance</b></button>
-          <label className="region-filter"><span>AAL region</span><select value={region} onChange={(event) => setRegion(event.target.value)}><option>All regions</option>{regions.map((item) => <option key={item}>{item}</option>)}</select></label>
+          <label className="region-filter"><span>Brodmann area</span><select value={brodmannArea} onChange={(event) => setBrodmannArea(event.target.value)}><option>All areas</option>{brodmannAreas.map((item) => <option key={item}>{item}</option>)}</select></label>
           <p className="visible-count">{visible.length} visible</p>
         </div>
 
@@ -208,7 +211,7 @@ function MontageExplorer() {
               <path className="guide-arc" d="M42 277 Q359 447 676 277 M67 539 Q359 384 651 539" />
             </svg>
             {visibleRegular.map((channel) => (
-              <button key={channel.id} className={`channel-line ${channel.type} ${active.id === channel.id ? 'selected' : ''}`} style={channelLineStyle(channel)} onMouseEnter={() => setActive(channel)} onFocus={() => setActive(channel)} onClick={() => setActive(channel)} aria-label={`${channel.id}, ${channel.source} to ${channel.detector}, ${channel.region}`} />
+              <button key={channel.id} className={`channel-line ${channel.type} ${active.id === channel.id ? 'selected' : ''}`} style={channelLineStyle(channel)} onMouseEnter={() => setActive(channel)} onFocus={() => setActive(channel)} onClick={() => setActive(channel)} aria-label={`${channel.id}, ${channel.source} to ${channel.detector}, ${channel.brodmannArea || 'no fOLD Brodmann assignment'}`} />
             ))}
             {displayOptodes.map((optode) => {
               const point = flatPosition(optode.id);
@@ -221,7 +224,7 @@ function MontageExplorer() {
             })}
             {showDetectors && Array.from(visibleShort.values()).map((channel) => {
               const point = flatPosition(channel.source);
-              return <button key={channel.id} className={`short-channel-hit ${active.id === channel.id ? 'selected' : ''}`} style={{ left: `${point.x}%`, top: `${point.y}%` }} onMouseEnter={() => setActive(channel)} onFocus={() => setActive(channel)} onClick={() => setActive(channel)} aria-label={`${channel.id}, short channel ${channel.source} to ${channel.detector}, ${channel.region}`} />;
+              return <button key={channel.id} className={`short-channel-hit ${active.id === channel.id ? 'selected' : ''}`} style={{ left: `${point.x}%`, top: `${point.y}%` }} onMouseEnter={() => setActive(channel)} onFocus={() => setActive(channel)} onClick={() => setActive(channel)} aria-label={`${channel.id}, short channel ${channel.source} to ${channel.detector}, ${channel.brodmannArea || 'no fOLD Brodmann assignment'}`} />;
             })}
           </div> : <Suspense fallback={<div className="brain-viewer brain-suspense">Preparing 3D view…</div>}>
             <BrainMontage3D
@@ -242,8 +245,8 @@ function MontageExplorer() {
           <aside className="channel-inspector" aria-live="polite">
             <p className="inspector-label">Selected channel</p>
             <div className="channel-title"><span className={`channel-swatch ${active.type}`} /><h3>{active.id}</h3><span className="channel-type">{active.type === 'short' ? 'Short' : 'Regular'}</span></div>
-            <dl><div><dt>Source–detector pair</dt><dd>{active.source} – {active.detector}</dd></div><div><dt>10–20 reference</dt><dd>{active.type === 'short' ? optodeReference(active.source) : `${optodeReference(active.source)} – ${optodeReference(active.detector)}`}</dd></div><div><dt>Distance</dt><dd>{active.distance} mm</dd></div><div><dt>Midpoint</dt><dd>{active.mni.join(', ')} mm</dd></div><div><dt>AtlasViewer AAL label</dt><dd>{active.region}</dd></div></dl>
-            <p className="provisional-note"><strong>Atlas note.</strong> Anatomical labels are AAL assignments from the supplied <a href="https://github.com/BUNPC/AtlasViewer/wiki/Getting-MNI-coordinates-of-Probe-Projection-to-Cortex" target="_blank" rel="noreferrer">AtlasViewer</a> projection export. AtlasViewer’s default atlas is Colin27; source–detector pairs and displayed midpoints remain from the supplied BIDS/SNIRF data.</p>
+            <dl><div><dt>Source–detector pair</dt><dd>{active.source} – {active.detector}</dd></div><div><dt>10–20 reference</dt><dd>{active.type === 'short' ? optodeReference(active.source) : `${optodeReference(active.source)} – ${optodeReference(active.detector)}`}</dd></div><div><dt>Distance</dt><dd>{active.distance} mm</dd></div><div><dt>Midpoint</dt><dd>{active.mni.join(', ')} mm</dd></div><div><dt>fOLD Brodmann area</dt><dd>{active.brodmannArea || 'No fOLD assignment (short-separation channel)'}</dd></div></dl>
+            <p className="provisional-note"><strong>fOLD note.</strong> Regular-channel labels use the primary Brodmann area from the matched fOLD 10–10 channel pair. Short-separation channels have co-located detectors, so fOLD provides no direct area assignment for them.</p>
           </aside>
         </div>
       </div>
@@ -498,7 +501,7 @@ export default function Home() {
       <footer>
         <div><a className="brand" href="#top"><img className="footer-logo" src={`${assetBasePath}/maastricht-university-logo-white.png`} alt="Maastricht University" /></a></div>
         <div className="footer-links"><a href="https://zenodo.org/records/21033499" target="_blank" rel="noreferrer">Dataset ↗</a><a href="https://www.biorxiv.org/content/10.64898/2026.06.06.728412v1" target="_blank" rel="noreferrer">Preprint ↗</a></div>
-        <div className="footer-meta"><p className="license">BIDS 1.11.1 · SNIRF · CC BY-NC 4.0</p><p className="prototype-note">Anatomical labels: AAL parcels from the supplied <a href="https://github.com/BUNPC/AtlasViewer/wiki/Getting-MNI-coordinates-of-Probe-Projection-to-Cortex" target="_blank" rel="noreferrer">AtlasViewer</a> Colin27 projection export.</p><p className="prototype-note">Website created by Sophie Raible using Codex (GPT-5).</p><p className="site-version">Last updated: {formattedLastUpdated}</p></div>
+        <div className="footer-meta"><p className="license">BIDS 1.11.1 · SNIRF · CC BY-NC 4.0</p><p className="prototype-note">Montage areas: primary Brodmann assignments from the fOLD 10–10 channel table.</p><p className="prototype-note">Website created by Sophie Raible using Codex (GPT-5).</p><p className="site-version">Last updated: {formattedLastUpdated}</p></div>
       </footer>
     </main>
   );

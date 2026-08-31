@@ -1120,7 +1120,8 @@
         87.2,
         -10.8
       ],
-      "region": "Frontal_Med_Orb_R"
+      "region": "Frontal_Med_Orb_R",
+      "brodmannArea": "10 - Frontopolar area"
     },
     {
       "id": "Ch-002",
@@ -1135,7 +1136,8 @@
         86.3,
         11.9
       ],
-      "region": "Frontal_Sup_Medial_L"
+      "region": "Frontal_Sup_Medial_L",
+      "brodmannArea": "10 - Frontopolar area"
     },
     {
       "id": "Ch-003",
@@ -1150,7 +1152,8 @@
         87.2,
         -11.0
       ],
-      "region": "Frontal_Sup_L"
+      "region": "Frontal_Sup_L",
+      "brodmannArea": "10 - Frontopolar area"
     },
     {
       "id": "Ch-004",
@@ -1165,7 +1168,8 @@
         89.2,
         -7.8
       ],
-      "region": "Frontal_Sup_Medial_R"
+      "region": "Frontal_Sup_Medial_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-005",
@@ -1180,7 +1184,8 @@
         82.1,
         1.3
       ],
-      "region": "Frontal_Mid_R"
+      "region": "Frontal_Mid_R",
+      "brodmannArea": "10 - Frontopolar area"
     },
     {
       "id": "Ch-006",
@@ -1195,7 +1200,8 @@
         81.2,
         24.0
       ],
-      "region": "Cingulum_Ant_R"
+      "region": "Cingulum_Ant_R",
+      "brodmannArea": "10 - Frontopolar area"
     },
     {
       "id": "Ch-007",
@@ -1210,7 +1216,8 @@
         69.9,
         36.9
       ],
-      "region": "Frontal_Mid_R"
+      "region": "Frontal_Mid_R",
+      "brodmannArea": "9 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-008",
@@ -1225,7 +1232,8 @@
         64.7,
         13.6
       ],
-      "region": "Frontal_Mid_R"
+      "region": "Frontal_Mid_R",
+      "brodmannArea": "46 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-009",
@@ -1240,7 +1248,8 @@
         76.9,
         16.6
       ],
-      "region": "Frontal_Sup_R"
+      "region": "Frontal_Sup_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-010",
@@ -1255,7 +1264,8 @@
         77.1,
         -15.7
       ],
-      "region": "Frontal_Sup_Orb_R"
+      "region": "Frontal_Sup_Orb_R",
+      "brodmannArea": "10 - Frontopolar area"
     },
     {
       "id": "Ch-011",
@@ -1270,7 +1280,8 @@
         59.7,
         -3.4
       ],
-      "region": "Frontal_Inf_Tri_R"
+      "region": "Frontal_Inf_Tri_R",
+      "brodmannArea": "45 - pars triangularis Broca's area"
     },
     {
       "id": "Ch-012",
@@ -1285,7 +1296,8 @@
         65.6,
         -17.3
       ],
-      "region": "Frontal_Mid_Orb_R"
+      "region": "Frontal_Mid_Orb_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-013",
@@ -1300,7 +1312,8 @@
         72.9,
         48.6
       ],
-      "region": "Cingulum_Mid_R"
+      "region": "Cingulum_Mid_R",
+      "brodmannArea": "9 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-014",
@@ -1315,7 +1328,8 @@
         61.6,
         61.5
       ],
-      "region": "Frontal_Sup_R"
+      "region": "Frontal_Sup_R",
+      "brodmannArea": "9 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-015",
@@ -1330,7 +1344,8 @@
         45.9,
         76.6
       ],
-      "region": "Supp_Motor_Area_L"
+      "region": "Supp_Motor_Area_L",
+      "brodmannArea": "8 - Includes Frontal eye fields"
     },
     {
       "id": "Ch-016",
@@ -1345,7 +1360,8 @@
         61.4,
         61.4
       ],
-      "region": "Frontal_Sup_L"
+      "region": "Frontal_Sup_L",
+      "brodmannArea": "9 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-017",
@@ -1360,7 +1376,8 @@
         62.3,
         65.3
       ],
-      "region": "Frontal_Sup_Medial_R"
+      "region": "Frontal_Sup_Medial_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-018",
@@ -1375,7 +1392,8 @@
         58.6,
         47.5
       ],
-      "region": "Frontal_Sup_R"
+      "region": "Frontal_Sup_R",
+      "brodmannArea": "9 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-019",
@@ -1390,7 +1408,8 @@
         53.4,
         24.2
       ],
-      "region": "Frontal_Mid_R"
+      "region": "Frontal_Mid_R",
+      "brodmannArea": "45 - pars triangularis Broca's area"
     },
     {
       "id": "Ch-020",
@@ -1405,7 +1424,8 @@
         40.7,
         45.3
       ],
-      "region": "Frontal_Inf_Oper_R"
+      "region": "Frontal_Inf_Oper_R",
+      "brodmannArea": "9 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-021",
@@ -1420,7 +1440,8 @@
         53.4,
         37.3
       ],
-      "region": "Frontal_Inf_Tri_R"
+      "region": "Frontal_Inf_Tri_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-022",
@@ -1435,7 +1456,8 @@
         47.1,
         -3.8
       ],
-      "region": "Frontal_Inf_Tri_R"
+      "region": "Frontal_Inf_Tri_R",
+      "brodmannArea": "45 - pars triangularis Broca's area"
     },
     {
       "id": "Ch-023",
@@ -1450,7 +1472,8 @@
         40.0,
         -18.7
       ],
-      "region": "Frontal_Inf_Tri_R"
+      "region": "Frontal_Inf_Tri_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-024",
@@ -1465,7 +1488,8 @@
         44.5,
         67.7
       ],
-      "region": "Frontal_Sup_R"
+      "region": "Frontal_Sup_R",
+      "brodmannArea": "8 - Includes Frontal eye fields"
     },
     {
       "id": "Ch-025",
@@ -1480,7 +1504,8 @@
         28.8,
         82.8
       ],
-      "region": "Supp_Motor_Area_R"
+      "region": "Supp_Motor_Area_R",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-026",
@@ -1495,7 +1520,8 @@
         26.6,
         65.5
       ],
-      "region": "Frontal_Mid_R"
+      "region": "Frontal_Mid_R",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-027",
@@ -1510,7 +1536,8 @@
         9.8,
         84.1
       ],
-      "region": "Frontal_Sup_R"
+      "region": "Frontal_Sup_R",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-028",
@@ -1525,7 +1552,8 @@
         25.3,
         78.0
       ],
-      "region": "Frontal_Sup_R"
+      "region": "Frontal_Sup_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-029",
@@ -1540,7 +1568,8 @@
         35.4,
         15.1
       ],
-      "region": "Frontal_Inf_Tri_R"
+      "region": "Frontal_Inf_Tri_R",
+      "brodmannArea": "45 - pars triangularis Broca's area"
     },
     {
       "id": "Ch-030",
@@ -1555,7 +1584,8 @@
         22.7,
         36.3
       ],
-      "region": "Frontal_Inf_Oper_R"
+      "region": "Frontal_Inf_Oper_R",
+      "brodmannArea": "44 - pars opercularis, part of Broca's area"
     },
     {
       "id": "Ch-031",
@@ -1570,7 +1600,8 @@
         4.3,
         22.5
       ],
-      "region": "Frontal_Inf_Oper_R"
+      "region": "Frontal_Inf_Oper_R",
+      "brodmannArea": "43 - Subcentral area"
     },
     {
       "id": "Ch-032",
@@ -1585,7 +1616,8 @@
         16.7,
         19.6
       ],
-      "region": "Frontal_Inf_Oper_R"
+      "region": "Frontal_Inf_Oper_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-033",
@@ -1600,7 +1632,8 @@
         10.5,
         94.5
       ],
-      "region": "Supp_Motor_Area_L"
+      "region": "Supp_Motor_Area_L",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-034",
@@ -1615,7 +1648,8 @@
         -8.5,
         95.8
       ],
-      "region": "Supp_Motor_Area_R"
+      "region": "Supp_Motor_Area_R",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-035",
@@ -1630,7 +1664,8 @@
         -28.3,
         102.1
       ],
-      "region": "Paracentral_Lobule_R"
+      "region": "Paracentral_Lobule_R",
+      "brodmannArea": "4 - Primary Motor Cortex"
     },
     {
       "id": "Ch-036",
@@ -1645,7 +1680,8 @@
         -9.0,
         95.6
       ],
-      "region": "Paracentral_Lobule_L"
+      "region": "Paracentral_Lobule_L",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-037",
@@ -1660,7 +1696,8 @@
         -8.7,
         101.2
       ],
-      "region": "Paracentral_Lobule_L"
+      "region": "Paracentral_Lobule_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-038",
@@ -1675,7 +1712,8 @@
         7.6,
         58.3
       ],
-      "region": "Frontal_Mid_R"
+      "region": "Frontal_Mid_R",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-039",
@@ -1690,7 +1728,8 @@
         -9.2,
         76.9
       ],
-      "region": "Precentral_R"
+      "region": "Precentral_R",
+      "brodmannArea": "4 - Primary Motor Cortex"
     },
     {
       "id": "Ch-040",
@@ -1705,7 +1744,8 @@
         -10.8,
         44.6
       ],
-      "region": "Postcentral_R"
+      "region": "Postcentral_R",
+      "brodmannArea": "2 - Primary Somatosensory Cortex"
     },
     {
       "id": "Ch-041",
@@ -1720,7 +1760,8 @@
         -28.3,
         65.0
       ],
-      "region": "Postcentral_R"
+      "region": "Postcentral_R",
+      "brodmannArea": "40 - Supramarginal gyrus part of Wernicke's area"
     },
     {
       "id": "Ch-042",
@@ -1735,7 +1776,8 @@
         -13.8,
         63.5
       ],
-      "region": "Postcentral_R"
+      "region": "Postcentral_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-043",
@@ -1750,7 +1792,8 @@
         -13.0,
         5.0
       ],
-      "region": "Temporal_Sup_R"
+      "region": "Temporal_Sup_R",
+      "brodmannArea": "22 - Superior Temporal Gyrus"
     },
     {
       "id": "Ch-044",
@@ -1765,7 +1808,8 @@
         -29.6,
         -13.9
       ],
-      "region": "Temporal_Mid_R"
+      "region": "Temporal_Mid_R",
+      "brodmannArea": "21 - Middle Temporal gyrus"
     },
     {
       "id": "Ch-045",
@@ -1780,7 +1824,8 @@
         -18.1,
         -15.5
       ],
-      "region": "Temporal_Mid_R"
+      "region": "Temporal_Mid_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-046",
@@ -1795,7 +1840,8 @@
         -28.2,
         91.8
       ],
-      "region": "Postcentral_R"
+      "region": "Postcentral_R",
+      "brodmannArea": "4 - Primary Motor Cortex"
     },
     {
       "id": "Ch-047",
@@ -1810,7 +1856,8 @@
         -48.0,
         98.0
       ],
-      "region": "Parietal_Sup_R"
+      "region": "Parietal_Sup_R",
+      "brodmannArea": "5 - Somatosensory Association Cortex"
     },
     {
       "id": "Ch-048",
@@ -1825,7 +1872,8 @@
         -47.3,
         79.8
       ],
-      "region": "Parietal_Inf_R"
+      "region": "Parietal_Inf_R",
+      "brodmannArea": "40 - Supramarginal gyrus part of Wernicke's area"
     },
     {
       "id": "Ch-049",
@@ -1840,7 +1888,8 @@
         -65.2,
         85.6
       ],
-      "region": "Parietal_Sup_R"
+      "region": "Parietal_Sup_R",
+      "brodmannArea": "7 - Somatosensory Association Cortex"
     },
     {
       "id": "Ch-050",
@@ -1855,7 +1904,8 @@
         -51.6,
         92.9
       ],
-      "region": "Postcentral_R"
+      "region": "Postcentral_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-051",
@@ -1870,7 +1920,8 @@
         -28.9,
         27.0
       ],
-      "region": "Temporal_Sup_R"
+      "region": "Temporal_Sup_R",
+      "brodmannArea": "22 - Superior Temporal Gyrus"
     },
     {
       "id": "Ch-052",
@@ -1885,7 +1936,8 @@
         -46.4,
         47.5
       ],
-      "region": "SupraMarginal_R"
+      "region": "SupraMarginal_R",
+      "brodmannArea": "40 - Supramarginal gyrus part of Wernicke's area"
     },
     {
       "id": "Ch-053",
@@ -1900,7 +1952,8 @@
         -45.5,
         8.1
       ],
-      "region": "Temporal_Mid_R"
+      "region": "Temporal_Mid_R",
+      "brodmannArea": "22 - Superior Temporal Gyrus"
     },
     {
       "id": "Ch-054",
@@ -1915,7 +1968,8 @@
         -61.8,
         27.5
       ],
-      "region": "Angular_R"
+      "region": "Angular_R",
+      "brodmannArea": "39 - Angular gyrus, part of Wernicke's area"
     },
     {
       "id": "Ch-055",
@@ -1930,7 +1984,8 @@
         -49.7,
         28.3
       ],
-      "region": "Angular_R"
+      "region": "Angular_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-056",
@@ -1945,7 +2000,8 @@
         -65.8,
         93.6
       ],
-      "region": "Precuneus_L"
+      "region": "Precuneus_L",
+      "brodmannArea": "7 - Somatosensory Association Cortex"
     },
     {
       "id": "Ch-057",
@@ -1960,7 +2016,8 @@
         -83.0,
         81.2
       ],
-      "region": "Precuneus_R"
+      "region": "Precuneus_R",
+      "brodmannArea": "7 - Somatosensory Association Cortex"
     },
     {
       "id": "Ch-058",
@@ -1975,7 +2032,8 @@
         -83.2,
         80.9
       ],
-      "region": "Precuneus_L"
+      "region": "Precuneus_L",
+      "brodmannArea": "7 - Somatosensory Association Cortex"
     },
     {
       "id": "Ch-059",
@@ -1990,7 +2048,8 @@
         -83.2,
         84.5
       ],
-      "region": "Precuneus_L"
+      "region": "Precuneus_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-060",
@@ -2005,7 +2064,8 @@
         -63.7,
         61.7
       ],
-      "region": "Angular_R"
+      "region": "Angular_R",
+      "brodmannArea": "39 - Angular gyrus, part of Wernicke's area"
     },
     {
       "id": "Ch-061",
@@ -2020,7 +2080,8 @@
         -81.6,
         67.5
       ],
-      "region": "Angular_R"
+      "region": "Angular_R",
+      "brodmannArea": "7 - Somatosensory Association Cortex"
     },
     {
       "id": "Ch-062",
@@ -2035,7 +2096,8 @@
         -79.1,
         41.7
       ],
-      "region": "Occipital_Mid_R"
+      "region": "Occipital_Mid_R",
+      "brodmannArea": "39 - Angular gyrus, part of Wernicke's area"
     },
     {
       "id": "Ch-063",
@@ -2050,7 +2112,8 @@
         -92.6,
         47.3
       ],
-      "region": "Angular_R"
+      "region": "Angular_R",
+      "brodmannArea": "19 - V3"
     },
     {
       "id": "Ch-064",
@@ -2065,7 +2128,8 @@
         -83.4,
         56.8
       ],
-      "region": "Angular_R"
+      "region": "Angular_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-065",
@@ -2080,7 +2144,8 @@
         -59.8,
         -9.6
       ],
-      "region": "Temporal_Mid_R"
+      "region": "Temporal_Mid_R",
+      "brodmannArea": "37 - Fusiform gyrus"
     },
     {
       "id": "Ch-066",
@@ -2095,7 +2160,8 @@
         -76.1,
         9.7
       ],
-      "region": "Temporal_Mid_R"
+      "region": "Temporal_Mid_R",
+      "brodmannArea": "37 - Fusiform gyrus"
     },
     {
       "id": "Ch-067",
@@ -2110,7 +2176,8 @@
         -78.7,
         -7.2
       ],
-      "region": "Temporal_Mid_R"
+      "region": "Temporal_Mid_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-068",
@@ -2125,7 +2192,8 @@
         -94.7,
         65.0
       ],
-      "region": "Parietal_Sup_R"
+      "region": "Parietal_Sup_R",
+      "brodmannArea": "7 - Somatosensory Association Cortex"
     },
     {
       "id": "Ch-069",
@@ -2140,7 +2208,8 @@
         -105.7,
         44.8
       ],
-      "region": "Cuneus_R"
+      "region": "Cuneus_R",
+      "brodmannArea": "18 - Visual Association Cortex (V2)"
     },
     {
       "id": "Ch-070",
@@ -2155,7 +2224,8 @@
         -113.1,
         33.2
       ],
-      "region": "Cuneus_L"
+      "region": "Cuneus_L",
+      "brodmannArea": "17 - Primary Visual Cortex (V1)"
     },
     {
       "id": "Ch-071",
@@ -2170,7 +2240,8 @@
         -105.9,
         44.5
       ],
-      "region": "Occipital_Sup_L"
+      "region": "Occipital_Sup_L",
+      "brodmannArea": "18 - Visual Association Cortex (V2)"
     },
     {
       "id": "Ch-072",
@@ -2185,7 +2256,8 @@
         -94.9,
         64.8
       ],
-      "region": "Parietal_Sup_L"
+      "region": "Parietal_Sup_L",
+      "brodmannArea": "19 - V3"
     },
     {
       "id": "Ch-073",
@@ -2200,7 +2272,8 @@
         -106.6,
         52.0
       ],
-      "region": "Cuneus_L"
+      "region": "Cuneus_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-074",
@@ -2215,7 +2288,8 @@
         -117.8,
         10.5
       ],
-      "region": "Occipital_Mid_L"
+      "region": "Occipital_Mid_L",
+      "brodmannArea": "17 - Primary Visual Cortex (V1)"
     },
     {
       "id": "Ch-075",
@@ -2230,7 +2304,8 @@
         -115.3,
         -13.3
       ],
-      "region": "Occipital_Inf_L"
+      "region": "Occipital_Inf_L",
+      "brodmannArea": "18 - Visual Association Cortex (V2)"
     },
     {
       "id": "Ch-076",
@@ -2245,7 +2320,8 @@
         -110.5,
         21.9
       ],
-      "region": "Occipital_Sup_L"
+      "region": "Occipital_Sup_L",
+      "brodmannArea": "18 - Visual Association Cortex (V2)"
     },
     {
       "id": "Ch-077",
@@ -2260,7 +2336,8 @@
         -114.3,
         6.9
       ],
-      "region": "Occipital_Mid_L"
+      "region": "Occipital_Mid_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-078",
@@ -2275,7 +2352,8 @@
         -110.3,
         22.3
       ],
-      "region": "Cuneus_R"
+      "region": "Cuneus_R",
+      "brodmannArea": "17 - Primary Visual Cortex (V1)"
     },
     {
       "id": "Ch-079",
@@ -2290,7 +2368,8 @@
         -117.7,
         10.6
       ],
-      "region": "Occipital_Sup_R"
+      "region": "Occipital_Sup_R",
+      "brodmannArea": "17 - Primary Visual Cortex (V1)"
     },
     {
       "id": "Ch-080",
@@ -2305,7 +2384,8 @@
         -115.1,
         -13.1
       ],
-      "region": "Occipital_Inf_R"
+      "region": "Occipital_Inf_R",
+      "brodmannArea": "18 - Visual Association Cortex (V2)"
     },
     {
       "id": "Ch-081",
@@ -2320,7 +2400,8 @@
         -117.1,
         7.0
       ],
-      "region": "Occipital_Sup_R"
+      "region": "Occipital_Sup_R",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-082",
@@ -2335,7 +2416,8 @@
         -120.0,
         -5.8
       ],
-      "region": "Calcarine_L"
+      "region": "Calcarine_L",
+      "brodmannArea": "17 - Primary Visual Cortex (V1)"
     },
     {
       "id": "Ch-083",
@@ -2350,7 +2432,8 @@
         -117.4,
         -29.5
       ],
-      "region": "Lingual_R"
+      "region": "Lingual_R",
+      "brodmannArea": "Brain_Outside"
     },
     {
       "id": "Ch-084",
@@ -2365,7 +2448,8 @@
         -117.5,
         -29.6
       ],
-      "region": "Lingual_L"
+      "region": "Lingual_L",
+      "brodmannArea": "Brain_Outside"
     },
     {
       "id": "Ch-085",
@@ -2380,7 +2464,8 @@
         -120.4,
         -25.7
       ],
-      "region": "Calcarine_L"
+      "region": "Calcarine_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-086",
@@ -2395,7 +2480,8 @@
         -93.1,
         46.6
       ],
-      "region": "Occipital_Mid_L"
+      "region": "Occipital_Mid_L",
+      "brodmannArea": "19 - V3"
     },
     {
       "id": "Ch-087",
@@ -2410,7 +2496,8 @@
         -82.2,
         66.8
       ],
-      "region": "Parietal_Inf_L"
+      "region": "Parietal_Inf_L",
+      "brodmannArea": "7 - Somatosensory Association Cortex"
     },
     {
       "id": "Ch-088",
@@ -2425,7 +2512,8 @@
         -80.0,
         40.9
       ],
-      "region": "Angular_L"
+      "region": "Angular_L",
+      "brodmannArea": "39 - Angular gyrus, part of Wernicke's area"
     },
     {
       "id": "Ch-089",
@@ -2440,7 +2528,8 @@
         -64.6,
         60.9
       ],
-      "region": "Parietal_Inf_L"
+      "region": "Parietal_Inf_L",
+      "brodmannArea": "39 - Angular gyrus, part of Wernicke's area"
     },
     {
       "id": "Ch-090",
@@ -2455,7 +2544,8 @@
         -78.0,
         56.2
       ],
-      "region": "Angular_L"
+      "region": "Angular_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-091",
@@ -2470,7 +2560,8 @@
         -77.1,
         9.1
       ],
-      "region": "Occipital_Mid_L"
+      "region": "Occipital_Mid_L",
+      "brodmannArea": "37 - Fusiform gyrus"
     },
     {
       "id": "Ch-092",
@@ -2485,7 +2576,8 @@
         -61.0,
         -10.2
       ],
-      "region": "Temporal_Mid_L"
+      "region": "Temporal_Mid_L",
+      "brodmannArea": "37 - Fusiform gyrus"
     },
     {
       "id": "Ch-093",
@@ -2500,7 +2592,8 @@
         -72.0,
         -7.4
       ],
-      "region": "Temporal_Inf_L"
+      "region": "Temporal_Inf_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-094",
@@ -2515,7 +2608,8 @@
         -48.3,
         97.8
       ],
-      "region": "Postcentral_L"
+      "region": "Postcentral_L",
+      "brodmannArea": "5 - Somatosensory Association Cortex"
     },
     {
       "id": "Ch-095",
@@ -2530,7 +2624,8 @@
         -65.7,
         85.1
       ],
-      "region": "Postcentral_L"
+      "region": "Postcentral_L",
+      "brodmannArea": "7 - Somatosensory Association Cortex"
     },
     {
       "id": "Ch-096",
@@ -2545,7 +2640,8 @@
         -48.2,
         79.2
       ],
-      "region": "Parietal_Inf_L"
+      "region": "Parietal_Inf_L",
+      "brodmannArea": "40 - Supramarginal gyrus part of Wernicke's area"
     },
     {
       "id": "Ch-097",
@@ -2560,7 +2656,8 @@
         -28.9,
         91.3
       ],
-      "region": "Postcentral_L"
+      "region": "Postcentral_L",
+      "brodmannArea": "4 - Primary Motor Cortex"
     },
     {
       "id": "Ch-098",
@@ -2575,7 +2672,8 @@
         -44.3,
         92.5
       ],
-      "region": "Postcentral_L"
+      "region": "Postcentral_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-099",
@@ -2590,7 +2688,8 @@
         -63.0,
         26.7
       ],
-      "region": "SupraMarginal_L"
+      "region": "SupraMarginal_L",
+      "brodmannArea": "39 - Angular gyrus, part of Wernicke's area"
     },
     {
       "id": "Ch-100",
@@ -2605,7 +2704,8 @@
         -47.7,
         46.7
       ],
-      "region": "Parietal_Inf_L"
+      "region": "Parietal_Inf_L",
+      "brodmannArea": "40 - Supramarginal gyrus part of Wernicke's area"
     },
     {
       "id": "Ch-101",
@@ -2620,7 +2720,8 @@
         -46.9,
         7.4
       ],
-      "region": "Temporal_Sup_L"
+      "region": "Temporal_Sup_L",
+      "brodmannArea": "22 - Superior Temporal Gyrus"
     },
     {
       "id": "Ch-102",
@@ -2635,7 +2736,8 @@
         -30.6,
         26.3
       ],
-      "region": "SupraMarginal_L"
+      "region": "SupraMarginal_L",
+      "brodmannArea": "48 - Retrosubicular area"
     },
     {
       "id": "Ch-103",
@@ -2650,7 +2752,8 @@
         -43.3,
         27.4
       ],
-      "region": "Temporal_Sup_L"
+      "region": "Temporal_Sup_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-104",
@@ -2665,7 +2768,8 @@
         -29.7,
         64.4
       ],
-      "region": "Parietal_Inf_L"
+      "region": "Parietal_Inf_L",
+      "brodmannArea": "40 - Supramarginal gyrus part of Wernicke's area"
     },
     {
       "id": "Ch-105",
@@ -2680,7 +2784,8 @@
         -10.5,
         76.5
       ],
-      "region": "Precentral_L"
+      "region": "Precentral_L",
+      "brodmannArea": "4 - Primary Motor Cortex"
     },
     {
       "id": "Ch-106",
@@ -2695,7 +2800,8 @@
         -12.7,
         43.9
       ],
-      "region": "Postcentral_L"
+      "region": "Postcentral_L",
+      "brodmannArea": "3 - Primary Somatosensory Cortex"
     },
     {
       "id": "Ch-107",
@@ -2710,7 +2816,8 @@
         6.2,
         57.9
       ],
-      "region": "Precentral_L"
+      "region": "Precentral_L",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-108",
@@ -2725,7 +2832,8 @@
         -7.9,
         63.3
       ],
-      "region": "Postcentral_L"
+      "region": "Postcentral_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-109",
@@ -2740,7 +2848,8 @@
         -31.3,
         -14.6
       ],
-      "region": "Temporal_Mid_L"
+      "region": "Temporal_Mid_L",
+      "brodmannArea": "21 - Middle Temporal gyrus"
     },
     {
       "id": "Ch-110",
@@ -2755,7 +2864,8 @@
         -15.0,
         4.2
       ],
-      "region": "Temporal_Sup_L"
+      "region": "Temporal_Sup_L",
+      "brodmannArea": "22 - Superior Temporal Gyrus"
     },
     {
       "id": "Ch-111",
@@ -2770,7 +2880,8 @@
         -12.4,
         -16.0
       ],
-      "region": "Temporal_Sup_L"
+      "region": "Temporal_Sup_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-112",
@@ -2785,7 +2896,8 @@
         28.5,
         82.8
       ],
-      "region": "Frontal_Sup_L"
+      "region": "Frontal_Sup_L",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-113",
@@ -2800,7 +2912,8 @@
         9.1,
         83.9
       ],
-      "region": "Frontal_Sup_L"
+      "region": "Frontal_Sup_L",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-114",
@@ -2815,7 +2928,8 @@
         25.8,
         65.3
       ],
-      "region": "Frontal_Mid_L"
+      "region": "Frontal_Mid_L",
+      "brodmannArea": "6 - Pre-Motor and Supplementary Motor Cortex"
     },
     {
       "id": "Ch-115",
@@ -2830,7 +2944,8 @@
         44.0,
         67.6
       ],
-      "region": "Frontal_Sup_L"
+      "region": "Frontal_Sup_L",
+      "brodmannArea": "8 - Includes Frontal eye fields"
     },
     {
       "id": "Ch-116",
@@ -2845,7 +2960,8 @@
         30.4,
         78.0
       ],
-      "region": "Frontal_Sup_L"
+      "region": "Frontal_Sup_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-117",
@@ -2860,7 +2976,8 @@
         2.6,
         21.8
       ],
-      "region": "Frontal_Inf_Oper_L"
+      "region": "Frontal_Inf_Oper_L",
+      "brodmannArea": "43 - Subcentral area"
     },
     {
       "id": "Ch-118",
@@ -2875,7 +2992,8 @@
         21.4,
         35.8
       ],
-      "region": "Frontal_Inf_Oper_L"
+      "region": "Frontal_Inf_Oper_L",
+      "brodmannArea": "44 - pars opercularis, part of Broca's area"
     },
     {
       "id": "Ch-119",
@@ -2890,7 +3008,8 @@
         34.3,
         14.6
       ],
-      "region": "Frontal_Inf_Tri_L"
+      "region": "Frontal_Inf_Tri_L",
+      "brodmannArea": "45 - pars triangularis Broca's area"
     },
     {
       "id": "Ch-120",
@@ -2905,7 +3024,8 @@
         22.5,
         18.9
       ],
-      "region": "Frontal_Inf_Tri_L"
+      "region": "Frontal_Inf_Tri_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-121",
@@ -2920,7 +3040,8 @@
         39.8,
         44.9
       ],
-      "region": "Frontal_Mid_L"
+      "region": "Frontal_Mid_L",
+      "brodmannArea": "9 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-122",
@@ -2935,7 +3056,8 @@
         58.1,
         47.3
       ],
-      "region": "Frontal_Sup_L"
+      "region": "Frontal_Sup_L",
+      "brodmannArea": "9 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-123",
@@ -2950,7 +3072,8 @@
         52.7,
         23.7
       ],
-      "region": "Frontal_Mid_L"
+      "region": "Frontal_Mid_L",
+      "brodmannArea": "45 - pars triangularis Broca's area"
     },
     {
       "id": "Ch-124",
@@ -2965,7 +3088,8 @@
         58.9,
         37.3
       ],
-      "region": "Frontal_Mid_L"
+      "region": "Frontal_Mid_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-125",
@@ -2980,7 +3104,8 @@
         46.2,
         -4.5
       ],
-      "region": "Frontal_Inf_Tri_L"
+      "region": "Frontal_Inf_Tri_L",
+      "brodmannArea": "45 - pars triangularis Broca's area"
     },
     {
       "id": "Ch-126",
@@ -2995,7 +3120,8 @@
         46.3,
         -19.2
       ],
-      "region": "Frontal_Mid_Orb_L"
+      "region": "Frontal_Mid_Orb_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-127",
@@ -3010,7 +3136,8 @@
         81.1,
         23.9
       ],
-      "region": "Frontal_Sup_Medial_L"
+      "region": "Frontal_Sup_Medial_L",
+      "brodmannArea": "10 - Frontopolar area"
     },
     {
       "id": "Ch-128",
@@ -3025,7 +3152,8 @@
         69.6,
         36.7
       ],
-      "region": "Frontal_Mid_L"
+      "region": "Frontal_Mid_L",
+      "brodmannArea": "9 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-129",
@@ -3040,7 +3168,8 @@
         64.2,
         13.2
       ],
-      "region": "Frontal_Inf_Tri_L"
+      "region": "Frontal_Inf_Tri_L",
+      "brodmannArea": "46 - Dorsolateral prefrontal cortex"
     },
     {
       "id": "Ch-130",
@@ -3055,7 +3184,8 @@
         82.0,
         1.0
       ],
-      "region": "Cingulum_Ant_L"
+      "region": "Cingulum_Ant_L",
+      "brodmannArea": "10 - Frontopolar area"
     },
     {
       "id": "Ch-131",
@@ -3070,7 +3200,8 @@
         80.5,
         16.3
       ],
-      "region": "Frontal_Sup_Medial_L"
+      "region": "Frontal_Sup_Medial_L",
+      "brodmannArea": ""
     },
     {
       "id": "Ch-132",
@@ -3085,7 +3216,8 @@
         59.2,
         -4.0
       ],
-      "region": "Frontal_Inf_Tri_L"
+      "region": "Frontal_Inf_Tri_L",
+      "brodmannArea": "45 - pars triangularis Broca's area"
     },
     {
       "id": "Ch-133",
@@ -3100,7 +3232,8 @@
         77.0,
         -16.2
       ],
-      "region": "Frontal_Sup_L"
+      "region": "Frontal_Sup_L",
+      "brodmannArea": "11 - Orbitofrontal area"
     },
     {
       "id": "Ch-134",
@@ -3115,7 +3248,8 @@
         71.6,
         -18.6
       ],
-      "region": "Frontal_Sup_L"
+      "region": "Frontal_Sup_L",
+      "brodmannArea": ""
     }
   ],
   "motorExample": {
@@ -11664,5 +11798,10 @@
     "atlas": "Colin27",
     "parcellation": "AAL",
     "coordinateSpace": "MNI"
+  },
+  "brodmannLabels": {
+    "source": "fOLD 10-10 channel table",
+    "atlas": "Brodmann",
+    "selection": "primary area by fOLD specificity"
   }
 }

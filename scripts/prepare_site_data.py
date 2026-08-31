@@ -19,6 +19,7 @@ OPTODES = Path(r"D:\mulpa\mulpa_bids_4publication\sub-01\nirs\sub-01_optodes.tsv
 SNIRF = Path(r"D:\mulpa\mulpa_preproc\sub-01\nirs\sub-01_task-motoraction_nirs_preproc_4glm.snirf")
 QC = Path(r"C:\Users\P70091213\Downloads\QA - MULPA Dataset - qc_final.csv")
 ATLASVIEWER_LABELS = ROOT / "data" / "atlasviewer-channel-labels.csv"
+FOLD_BRODMANN_LABELS = ROOT / "data" / "mulpa-fold-brodmann-channel-areas.csv"
 OUTPUT = ROOT / "app" / "derived-data.json"
 
 
@@ -62,6 +63,19 @@ def read_atlasviewer_labels() -> dict[tuple[str, str], str]:
     return labels
 
 
+def read_fold_brodmann_labels() -> dict[str, str]:
+    """Read the primary fOLD Brodmann assignment for each MULPA channel."""
+    labels: dict[str, str] = {}
+    with FOLD_BRODMANN_LABELS.open(encoding="utf-8-sig", newline="") as handle:
+        for row in csv.DictReader(handle):
+            channel_id = row["channel_id"].strip()
+            label = row["Brodmann_primary_area"].strip()
+            if channel_id in labels:
+                raise ValueError(f"Duplicate fOLD Brodmann label for {channel_id}")
+            labels[channel_id] = label
+    return labels
+
+
 def normalized(values: np.ndarray) -> np.ndarray:
     values = np.asarray(values, dtype=float)
     center = np.nanmedian(values)
@@ -77,7 +91,11 @@ def interpolate(group: h5py.Group, target_time: np.ndarray) -> np.ndarray:
     return np.interp(target_time, time, values)
 
 
-def read_snirf(optodes: list[dict], atlasviewer_labels: dict[tuple[str, str], str]) -> tuple[list[dict], dict]:
+def read_snirf(
+    optodes: list[dict],
+    atlasviewer_labels: dict[tuple[str, str], str],
+    fold_brodmann_labels: dict[str, str],
+) -> tuple[list[dict], dict]:
     numeric_id = lambda item: int(item["id"][1:])
     sources = sorted((item for item in optodes if item["type"] == "source"), key=numeric_id)
     detectors = sorted((item for item in optodes if item["type"] == "detector"), key=numeric_id)
@@ -118,9 +136,13 @@ def read_snirf(optodes: list[dict], atlasviewer_labels: dict[tuple[str, str], st
             atlasviewer_label = atlasviewer_labels.get((source["id"], detector["id"]))
             if atlasviewer_label is None:
                 raise ValueError(f"Missing AtlasViewer label for {source['id']}–{detector['id']}")
+            channel_id = f"Ch-{len(channels) + 1:03d}"
+            brodmann_area = fold_brodmann_labels.get(channel_id, "")
+            if channel_type == "long" and not brodmann_area:
+                raise ValueError(f"Missing fOLD Brodmann label for {channel_id}")
             channels.append(
                 {
-                    "id": f"Ch-{len(channels) + 1:03d}",
+                    "id": channel_id,
                     "source": source["id"],
                     "detector": detector["id"],
                     "type": channel_type,
@@ -129,6 +151,7 @@ def read_snirf(optodes: list[dict], atlasviewer_labels: dict[tuple[str, str], st
                     "y": round((source["y"] + detector["y"]) / 2, 2),
                     "mni": [round(float(value), 1) for value in midpoint],
                     "region": atlasviewer_label,
+                    "brodmannArea": brodmann_area,
                     "pair": pair,
                 }
             )
@@ -247,7 +270,8 @@ def read_qc() -> list[dict]:
 def main() -> None:
     optodes = read_optodes()
     atlasviewer_labels = read_atlasviewer_labels()
-    channels, signal = read_snirf(optodes, atlasviewer_labels)
+    fold_brodmann_labels = read_fold_brodmann_labels()
+    channels, signal = read_snirf(optodes, atlasviewer_labels, fold_brodmann_labels)
     payload = {
         "coordinateSystem": "MNI152NLin2009aSym",
         "anatomicalLabels": {
@@ -255,6 +279,11 @@ def main() -> None:
             "atlas": "Colin27",
             "parcellation": "AAL",
             "coordinateSpace": "MNI",
+        },
+        "brodmannLabels": {
+            "source": "fOLD 10-10 channel table",
+            "atlas": "Brodmann",
+            "selection": "primary area by fOLD specificity",
         },
         "optodes": optodes,
         "channels": channels,
