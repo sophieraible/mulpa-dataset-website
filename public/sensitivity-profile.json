@@ -6,8 +6,16 @@
     0.9844961166381836
   ],
   "surface": "C:/Users/P70091213/Documents/Satori/MNITemplates/ICBM152_nlin_asym_09c_D20k.srf",
+  "cutoff": 0.25,
   "palette": {
-    "low": "#c00000",
-    "high": "#ffc000"
+    "neutral": "#aba8a1",
+    "stops": [
+      "#1425d8",
+      "#00a9ff",
+      "#00e5d1",
+      "#f3ff28",
+      "#ff9800",
+      "#ec1010"
+    ]
   }
 }

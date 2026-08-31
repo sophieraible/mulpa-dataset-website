@@ -41,6 +41,15 @@ const CAMERA_POSITION = new THREE.Vector3(0, 34, 360);
 const CAMERA_TARGET = new THREE.Vector3(0, 15, 0);
 const HEAD_CENTER = new THREE.Vector3(0, 12, 0);
 const RING_AXIS = new THREE.Vector3(0, 0, 1);
+const SENSITIVITY_CUTOFF = 0.25;
+const SENSITIVITY_STOPS = [
+  { value: 0, color: '#1425d8' },
+  { value: 0.24, color: '#00a9ff' },
+  { value: 0.42, color: '#00e5d1' },
+  { value: 0.62, color: '#f3ff28' },
+  { value: 0.80, color: '#ff9800' },
+  { value: 1, color: '#ec1010' },
+];
 
 function mniToThree(mni: number[]) {
   return new THREE.Vector3(mni[0], mni[2], mni[1]);
@@ -86,12 +95,21 @@ function sensitivityValuesFromBuffer(buffer: ArrayBuffer, vertexCount: number) {
 }
 
 function sensitivityColors(values: Float32Array) {
-  const low = new THREE.Color('#c00000');
-  const high = new THREE.Color('#ffc000');
+  const neutral = new THREE.Color('#aba8a1');
+  const stops = SENSITIVITY_STOPS.map((stop) => ({ ...stop, color: new THREE.Color(stop.color) }));
   const color = new THREE.Color();
   const colors = new Float32Array(values.length * 3);
   values.forEach((value, index) => {
-    color.copy(low).lerp(high, THREE.MathUtils.clamp(value, 0, 1));
+    const scaled = (value - SENSITIVITY_CUTOFF) / (1 - SENSITIVITY_CUTOFF);
+    if (scaled <= 0) {
+      color.copy(neutral);
+    } else {
+      const position = THREE.MathUtils.clamp(scaled, 0, 1);
+      const upperIndex = stops.findIndex((stop) => position <= stop.value);
+      const upper = stops[Math.max(upperIndex, 1)];
+      const lower = stops[Math.max(upperIndex - 1, 0)];
+      color.copy(lower.color).lerp(upper.color, (position - lower.value) / (upper.value - lower.value));
+    }
     colors[index * 3] = color.r;
     colors[index * 3 + 1] = color.g;
     colors[index * 3 + 2] = color.b;

@@ -59,7 +59,11 @@ def main() -> None:
         "vertexCount": int(len(values)),
         "valueRange": [float(values.min()), float(values.max())],
         "surface": surface_name,
-        "palette": {"low": "#c00000", "high": "#ffc000"},
+        "cutoff": 0.25,
+        "palette": {
+            "neutral": "#aba8a1",
+            "stops": ["#1425d8", "#00a9ff", "#00e5d1", "#f3ff28", "#ff9800", "#ec1010"],
+        },
     }
     args.output.with_suffix(".json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {args.output}: {len(values):,} vertex values, range {metadata['valueRange']}")
