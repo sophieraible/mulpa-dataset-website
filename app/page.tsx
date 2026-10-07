@@ -43,9 +43,12 @@ type QcMeasure = 'resp' | 'hr' | 'ppg' | 'ecg' | 'emg' | 'gsr';
 
 const channels = generatedData.channels as Channel[];
 const optodes = generatedData.optodes as Optode[];
-const brodmannAreas = Array.from(new Set(
-  channels.flatMap((channel) => channel.brodmannArea ? [channel.brodmannArea] : []),
-)).sort((left, right) => left.localeCompare(right, undefined, { numeric: true, sensitivity: 'base' }));
+// fOLD area selections: optodes listed for the area plus every channel connecting them.
+const foldAreaSelections = new Map(generatedData.foldAreaSelections.map((selection) => [
+  selection.area,
+  { optodes: new Set(selection.optodes), channels: new Set(selection.channels) },
+]));
+const brodmannAreas = Array.from(foldAreaSelections.keys());
 const motorExample = generatedData.motorExample as {
   participant: string;
   eventDuration: number;
@@ -166,16 +169,19 @@ function MontageExplorer() {
   const [showShort, setShowShort] = useState(true);
   const [showSources, setShowSources] = useState(true);
   const [showDetectors, setShowDetectors] = useState(true);
+  const [showSensitivity, setShowSensitivity] = useState(false);
   const [brodmannArea, setBrodmannArea] = useState('All areas');
   const [active, setActive] = useState<Channel>(channels[35]);
 
+  const areaSelection = foldAreaSelections.get(brodmannArea);
   const visible = channels.filter((channel) => {
     const typeIsVisible = channel.type === 'long' ? showLong : showShort;
-    return typeIsVisible && (brodmannArea === 'All areas' || channel.brodmannArea === brodmannArea);
+    return typeIsVisible && (!areaSelection || areaSelection.channels.has(channel.id));
   });
   const visibleRegular = visible.filter((channel) => channel.type === 'long');
   const visibleShort = new Map(visible.filter((channel) => channel.type === 'short').map((channel) => [channel.source, channel]));
-  const displayOptodes = optodes.filter((optode) => !shortDetectorIds.has(optode.id) && (optode.type === 'source' ? showSources : showDetectors));
+  const selectedOptodeIds = areaSelection?.optodes ?? null;
+  const displayOptodes = optodes.filter((optode) => !shortDetectorIds.has(optode.id) && (optode.type === 'source' ? showSources : showDetectors) && (!selectedOptodeIds || selectedOptodeIds.has(optode.id)));
 
   return (
     <section className="section montage-section" id="montage">
@@ -197,6 +203,7 @@ function MontageExplorer() {
           <button className={`layer-toggle short ${showShort ? 'active' : ''}`} onClick={() => setShowShort(!showShort)} aria-pressed={showShort}><span /> Short channels <b>32</b></button>
           <button className={`layer-toggle source ${showSources ? 'active' : ''}`} onClick={() => setShowSources(!showSources)} aria-pressed={showSources}><span /> Sources <b>{sourceCount}</b></button>
           <button className={`layer-toggle detector ${showDetectors ? 'active' : ''}`} onClick={() => setShowDetectors(!showDetectors)} aria-pressed={showDetectors}><span /> Detectors <b>{regularDetectorCount} regular</b><b>{shortDetectorCount} short-distance</b></button>
+          {view === '3d' && <button className={`layer-toggle sensitivity ${showSensitivity ? 'active' : ''}`} onClick={() => setShowSensitivity(!showSensitivity)} aria-pressed={showSensitivity}><span /> Sensitivity profile</button>}
           <label className="region-filter"><span>Brodmann area</span><select value={brodmannArea} onChange={(event) => setBrodmannArea(event.target.value)}><option>All areas</option>{brodmannAreas.map((item) => <option key={item}>{item}</option>)}</select></label>
           <p className="visible-count">{visible.length} visible</p>
         </div>
@@ -233,6 +240,8 @@ function MontageExplorer() {
               shortDetectorIds={shortDetectorIds}
               showSources={showSources}
               showDetectors={showDetectors}
+              showSensitivity={showSensitivity}
+              selectedOptodeIds={selectedOptodeIds}
               activeChannelId={active.id}
               assetBasePath={assetBasePath}
               onSelect={(channelId) => {
@@ -246,7 +255,7 @@ function MontageExplorer() {
             <p className="inspector-label">Selected channel</p>
             <div className="channel-title"><span className={`channel-swatch ${active.type}`} /><h3>{active.id}</h3><span className="channel-type">{active.type === 'short' ? 'Short' : 'Regular'}</span></div>
             <dl><div><dt>Source–detector pair</dt><dd>{active.source} – {active.detector}</dd></div><div><dt>10–20 reference</dt><dd>{active.type === 'short' ? optodeReference(active.source) : `${optodeReference(active.source)} – ${optodeReference(active.detector)}`}</dd></div><div><dt>Distance</dt><dd>{active.distance} mm</dd></div><div><dt>Midpoint</dt><dd>{active.mni.join(', ')} mm</dd></div><div><dt>fOLD Brodmann area</dt><dd>{active.brodmannArea || 'No fOLD assignment (short-separation channel)'}</dd></div></dl>
-            <p className="provisional-note"><strong>fOLD note.</strong> Regular-channel labels use the primary Brodmann area from the matched fOLD 10–10 channel pair (<a href="https://doi.org/10.1038/s41598-018-21716-z" target="_blank" rel="noreferrer">Zimeo Morais, Balardin &amp; Sato, 2018</a>). Short-separation channels have co-located detectors, so fOLD provides no direct area assignment for them.</p>
+            <p className="provisional-note"><strong>fOLD note.</strong> Regular-channel labels use the primary Brodmann area from the matched fOLD 10–10 channel pair (<a href="https://doi.org/10.1038/s41598-018-21716-z" target="_blank" rel="noreferrer">Zimeo Morais, Balardin &amp; Sato, 2018</a>). Short-separation channels have co-located detectors, so fOLD provides no direct area assignment for them. Selecting a Brodmann area shows the optodes fOLD lists for that area and all channels connecting them.</p>
           </aside>
         </div>
       </div>

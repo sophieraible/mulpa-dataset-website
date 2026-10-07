@@ -11803,5 +11803,591 @@
     "source": "fOLD 10-10 channel table",
     "atlas": "Brodmann",
     "selection": "primary area by fOLD specificity"
+  },
+  "foldAreaSelections": [
+    {
+      "area": "4 - Primary Motor Cortex",
+      "optodes": [
+        "D7",
+        "D9",
+        "D23",
+        "S9",
+        "S10",
+        "S12",
+        "S23",
+        "S25"
+      ],
+      "channels": [
+        "Ch-034",
+        "Ch-035",
+        "Ch-036",
+        "Ch-037",
+        "Ch-039",
+        "Ch-042",
+        "Ch-046",
+        "Ch-047",
+        "Ch-050",
+        "Ch-094",
+        "Ch-097",
+        "Ch-098",
+        "Ch-105",
+        "Ch-108"
+      ]
+    },
+    {
+      "area": "5 - Somatosensory Association Cortex",
+      "optodes": [
+        "D9",
+        "S12",
+        "S14",
+        "S23"
+      ],
+      "channels": [
+        "Ch-047",
+        "Ch-050",
+        "Ch-056",
+        "Ch-059",
+        "Ch-094",
+        "Ch-098"
+      ]
+    },
+    {
+      "area": "6 - Pre-Motor and Supplementary Motor Cortex",
+      "optodes": [
+        "D5",
+        "D6",
+        "D7",
+        "D23",
+        "D25",
+        "S7",
+        "S8",
+        "S9",
+        "S10",
+        "S25",
+        "S27",
+        "S28"
+      ],
+      "channels": [
+        "Ch-025",
+        "Ch-026",
+        "Ch-027",
+        "Ch-028",
+        "Ch-030",
+        "Ch-032",
+        "Ch-033",
+        "Ch-034",
+        "Ch-036",
+        "Ch-037",
+        "Ch-038",
+        "Ch-039",
+        "Ch-042",
+        "Ch-105",
+        "Ch-107",
+        "Ch-108",
+        "Ch-112",
+        "Ch-113",
+        "Ch-114",
+        "Ch-116",
+        "Ch-118",
+        "Ch-120"
+      ]
+    },
+    {
+      "area": "7 - Somatosensory Association Cortex",
+      "optodes": [
+        "D9",
+        "D12",
+        "D19",
+        "S12",
+        "S14",
+        "S15",
+        "S17",
+        "S21",
+        "S23"
+      ],
+      "channels": [
+        "Ch-047",
+        "Ch-049",
+        "Ch-050",
+        "Ch-056",
+        "Ch-057",
+        "Ch-058",
+        "Ch-059",
+        "Ch-061",
+        "Ch-064",
+        "Ch-068",
+        "Ch-072",
+        "Ch-073",
+        "Ch-087",
+        "Ch-090",
+        "Ch-094",
+        "Ch-095",
+        "Ch-098"
+      ]
+    },
+    {
+      "area": "8 - Includes Frontal eye fields",
+      "optodes": [
+        "D3",
+        "D5",
+        "D26",
+        "S4",
+        "S7",
+        "S27"
+      ],
+      "channels": [
+        "Ch-014",
+        "Ch-015",
+        "Ch-016",
+        "Ch-017",
+        "Ch-024",
+        "Ch-025",
+        "Ch-028",
+        "Ch-112",
+        "Ch-115",
+        "Ch-116"
+      ]
+    },
+    {
+      "area": "9 - Dorsolateral prefrontal cortex",
+      "optodes": [
+        "D2",
+        "D3",
+        "D6",
+        "D25",
+        "D26",
+        "S2",
+        "S4",
+        "S5",
+        "S7",
+        "S27",
+        "S29",
+        "S31"
+      ],
+      "channels": [
+        "Ch-006",
+        "Ch-007",
+        "Ch-009",
+        "Ch-013",
+        "Ch-014",
+        "Ch-016",
+        "Ch-017",
+        "Ch-018",
+        "Ch-020",
+        "Ch-021",
+        "Ch-024",
+        "Ch-026",
+        "Ch-028",
+        "Ch-114",
+        "Ch-115",
+        "Ch-116",
+        "Ch-121",
+        "Ch-122",
+        "Ch-124",
+        "Ch-127",
+        "Ch-128",
+        "Ch-131"
+      ]
+    },
+    {
+      "area": "10 - Frontopolar area",
+      "optodes": [
+        "D1",
+        "D2",
+        "D28",
+        "S1",
+        "S2",
+        "S3",
+        "S31",
+        "S32"
+      ],
+      "channels": [
+        "Ch-001",
+        "Ch-002",
+        "Ch-003",
+        "Ch-004",
+        "Ch-005",
+        "Ch-006",
+        "Ch-009",
+        "Ch-010",
+        "Ch-012",
+        "Ch-127",
+        "Ch-130",
+        "Ch-131",
+        "Ch-133",
+        "Ch-134"
+      ]
+    },
+    {
+      "area": "11 - Orbitofrontal area",
+      "optodes": [
+        "D1",
+        "D28",
+        "S1",
+        "S3",
+        "S32"
+      ],
+      "channels": [
+        "Ch-001",
+        "Ch-003",
+        "Ch-004",
+        "Ch-010",
+        "Ch-012",
+        "Ch-133",
+        "Ch-134"
+      ]
+    },
+    {
+      "area": "17 - Primary Visual Cortex (V1)",
+      "optodes": [
+        "D14",
+        "D15",
+        "D18",
+        "S17",
+        "S18",
+        "S19",
+        "S20"
+      ],
+      "channels": [
+        "Ch-069",
+        "Ch-070",
+        "Ch-071",
+        "Ch-073",
+        "Ch-074",
+        "Ch-076",
+        "Ch-077",
+        "Ch-078",
+        "Ch-079",
+        "Ch-081",
+        "Ch-082",
+        "Ch-085"
+      ]
+    },
+    {
+      "area": "18 - Visual Association Cortex (V2)",
+      "optodes": [
+        "D14",
+        "D15",
+        "D16",
+        "D17",
+        "D18",
+        "S17",
+        "S18",
+        "S19",
+        "S20"
+      ],
+      "channels": [
+        "Ch-069",
+        "Ch-070",
+        "Ch-071",
+        "Ch-073",
+        "Ch-074",
+        "Ch-075",
+        "Ch-076",
+        "Ch-077",
+        "Ch-078",
+        "Ch-079",
+        "Ch-080",
+        "Ch-081",
+        "Ch-082",
+        "Ch-083",
+        "Ch-084",
+        "Ch-085"
+      ]
+    },
+    {
+      "area": "19 - V3",
+      "optodes": [
+        "D12",
+        "D14",
+        "D18",
+        "D19",
+        "S15",
+        "S16",
+        "S17",
+        "S21",
+        "S22"
+      ],
+      "channels": [
+        "Ch-061",
+        "Ch-063",
+        "Ch-064",
+        "Ch-067",
+        "Ch-068",
+        "Ch-069",
+        "Ch-071",
+        "Ch-072",
+        "Ch-073",
+        "Ch-086",
+        "Ch-087",
+        "Ch-090",
+        "Ch-093"
+      ]
+    },
+    {
+      "area": "20 - Inferior Temporal gyrus",
+      "optodes": [
+        "D11",
+        "D22",
+        "S11",
+        "S26"
+      ],
+      "channels": [
+        "Ch-044",
+        "Ch-045",
+        "Ch-109",
+        "Ch-111"
+      ]
+    },
+    {
+      "area": "21 - Middle Temporal gyrus",
+      "optodes": [
+        "D8",
+        "D11",
+        "D22",
+        "D24",
+        "S11",
+        "S13",
+        "S24",
+        "S26"
+      ],
+      "channels": [
+        "Ch-043",
+        "Ch-044",
+        "Ch-045",
+        "Ch-051",
+        "Ch-053",
+        "Ch-055",
+        "Ch-101",
+        "Ch-102",
+        "Ch-103",
+        "Ch-109",
+        "Ch-110",
+        "Ch-111"
+      ]
+    },
+    {
+      "area": "22 - Superior Temporal Gyrus",
+      "optodes": [
+        "D8",
+        "D11",
+        "D22",
+        "D24",
+        "S11",
+        "S13",
+        "S24",
+        "S26"
+      ],
+      "channels": [
+        "Ch-043",
+        "Ch-044",
+        "Ch-045",
+        "Ch-051",
+        "Ch-053",
+        "Ch-055",
+        "Ch-101",
+        "Ch-102",
+        "Ch-103",
+        "Ch-109",
+        "Ch-110",
+        "Ch-111"
+      ]
+    },
+    {
+      "area": "37 - Fusiform gyrus",
+      "optodes": [
+        "D11",
+        "D13",
+        "D20",
+        "D22",
+        "S16",
+        "S22"
+      ],
+      "channels": [
+        "Ch-065",
+        "Ch-066",
+        "Ch-067",
+        "Ch-091",
+        "Ch-092",
+        "Ch-093"
+      ]
+    },
+    {
+      "area": "39 - Angular gyrus, part of Wernicke's area",
+      "optodes": [
+        "D10",
+        "D13",
+        "D20",
+        "D21",
+        "S13",
+        "S15",
+        "S21",
+        "S24"
+      ],
+      "channels": [
+        "Ch-052",
+        "Ch-054",
+        "Ch-055",
+        "Ch-060",
+        "Ch-062",
+        "Ch-064",
+        "Ch-088",
+        "Ch-089",
+        "Ch-090",
+        "Ch-099",
+        "Ch-100",
+        "Ch-103"
+      ]
+    },
+    {
+      "area": "40 - Supramarginal gyrus part of Wernicke's area",
+      "optodes": [
+        "D10",
+        "D21",
+        "S10",
+        "S12",
+        "S13",
+        "S23",
+        "S24",
+        "S25"
+      ],
+      "channels": [
+        "Ch-041",
+        "Ch-042",
+        "Ch-048",
+        "Ch-050",
+        "Ch-052",
+        "Ch-055",
+        "Ch-096",
+        "Ch-098",
+        "Ch-100",
+        "Ch-103",
+        "Ch-104",
+        "Ch-108"
+      ]
+    },
+    {
+      "area": "43 - Subcentral area",
+      "optodes": [
+        "D8",
+        "D24",
+        "S8",
+        "S28"
+      ],
+      "channels": [
+        "Ch-031",
+        "Ch-032",
+        "Ch-117",
+        "Ch-120"
+      ]
+    },
+    {
+      "area": "44 - pars opercularis, part of Broca's area",
+      "optodes": [
+        "D4",
+        "D6",
+        "D25",
+        "D27",
+        "S8",
+        "S28"
+      ],
+      "channels": [
+        "Ch-029",
+        "Ch-030",
+        "Ch-032",
+        "Ch-118",
+        "Ch-119",
+        "Ch-120"
+      ]
+    },
+    {
+      "area": "45 - pars triangularis Broca's area",
+      "optodes": [
+        "D4",
+        "D27",
+        "S2",
+        "S3",
+        "S5",
+        "S6",
+        "S8",
+        "S28",
+        "S29",
+        "S30",
+        "S31",
+        "S32"
+      ],
+      "channels": [
+        "Ch-008",
+        "Ch-009",
+        "Ch-011",
+        "Ch-012",
+        "Ch-019",
+        "Ch-021",
+        "Ch-022",
+        "Ch-023",
+        "Ch-029",
+        "Ch-032",
+        "Ch-119",
+        "Ch-120",
+        "Ch-123",
+        "Ch-124",
+        "Ch-125",
+        "Ch-126",
+        "Ch-129",
+        "Ch-131",
+        "Ch-132",
+        "Ch-134"
+      ]
+    },
+    {
+      "area": "46 - Dorsolateral prefrontal cortex",
+      "optodes": [
+        "D3",
+        "D4",
+        "D26",
+        "D27",
+        "S2",
+        "S3",
+        "S31",
+        "S32"
+      ],
+      "channels": [
+        "Ch-007",
+        "Ch-008",
+        "Ch-009",
+        "Ch-011",
+        "Ch-012",
+        "Ch-128",
+        "Ch-129",
+        "Ch-131",
+        "Ch-132",
+        "Ch-134"
+      ]
+    },
+    {
+      "area": "48 - Retrosubicular area",
+      "optodes": [
+        "D8",
+        "D24",
+        "S8",
+        "S13",
+        "S24",
+        "S28"
+      ],
+      "channels": [
+        "Ch-031",
+        "Ch-032",
+        "Ch-051",
+        "Ch-055",
+        "Ch-102",
+        "Ch-103",
+        "Ch-117",
+        "Ch-120"
+      ]
+    }
+  ],
+  "foldAreaSelectionSettings": {
+    "specificityCutoff": 0.3,
+    "forceSymmetry": true
   }
 }

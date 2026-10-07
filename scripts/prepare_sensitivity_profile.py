@@ -1,4 +1,14 @@
-"""Convert a one-map BrainVoyager SMP sensitivity profile to a web float buffer."""
+"""Convert a one-map BrainVoyager SMP sensitivity profile to a web float buffer.
+
+The SMP must be computed on the same SRF that ``prepare_brain_surface.py`` turned
+into ``public/brain-surface.bin`` (currently mni152_2009_bvbabel_blender20k.srf),
+so the vertex indices match.
+
+The Satori export stores normalized values in steps of 1/129 where 0 is the
+highest sensitivity (top of the Satori color bar) and 1 the lowest. The most
+frequent value marks vertices without sensitivity. The output stores the color
+bar position for each vertex (1 = top, 0 = bottom) and -1 for those vertices.
+"""
 
 from __future__ import annotations
 
@@ -49,25 +59,33 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("source", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--surface", type=Path, default=Path(__file__).resolve().parents[1] / "public" / "brain-surface.bin")
+    parser.add_argument("--range", type=float, nargs=2, default=(-3.92, -0.92), metavar=("BOTTOM", "TOP"),
+                        help="Satori color-bar labels for the bottom and top of the scale")
     args = parser.parse_args()
 
     surface_name, values = read_sensitivity_profile(args.source)
+    surface_vertices = struct.unpack("<I", args.surface.read_bytes()[8:12])[0]
+    if surface_vertices != len(values):
+        raise ValueError(f"SMP has {len(values)} vertices but {args.surface} has {surface_vertices}")
+
+    stored, counts = np.unique(values, return_counts=True)
+    no_signal = stored[np.argmax(counts)]
+    positions = np.where(values == no_signal, -1.0, 1.0 - values).astype("<f4")
+
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    values.astype("<f4", copy=False).tofile(args.output)
+    positions.tofile(args.output)
     metadata = {
-        "version": 1,
+        "version": 2,
         "vertexCount": int(len(values)),
-        "valueRange": [float(values.min()), float(values.max())],
         "surface": surface_name,
-        "webDisplayTransform": "sensitivity = 1 - storedValue",
-        "cutoff": 0.25,
-        "palette": {
-            "neutral": "#aba8a1",
-            "stops": ["#1425d8", "#00a9ff", "#00e5d1", "#f3ff28", "#ff9800", "#ec1010"],
-        },
+        "noSignalStoredValue": float(no_signal),
+        "noSignalVertices": int(counts.max()),
+        "colorBarRange": list(args.range),
+        "encoding": "float32 color-bar position per vertex: 1 = top (highest), 0 = bottom, -1 = no sensitivity",
     }
     args.output.with_suffix(".json").write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {args.output}: {len(values):,} vertex values, range {metadata['valueRange']}")
+    print(f"Wrote {args.output}: {len(values):,} vertices, {counts.max():,} without sensitivity")
 
 
 if __name__ == "__main__":

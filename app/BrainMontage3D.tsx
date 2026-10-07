@@ -23,6 +23,8 @@ type BrainMontage3DProps = {
   shortDetectorIds: Set<string>;
   showSources: boolean;
   showDetectors: boolean;
+  showSensitivity: boolean;
+  selectedOptodeIds: Set<string> | null;
   activeChannelId: string;
   assetBasePath: string;
   onSelect: (channelId: string) => void;
@@ -33,12 +35,24 @@ type ViewerRefs = {
   controls: OrbitControls;
   montage: THREE.Group;
   scene: THREE.Scene;
+  brain: THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial> | null;
 };
 
 const CAMERA_POSITION = new THREE.Vector3(0, 34, 360);
 const CAMERA_TARGET = new THREE.Vector3(0, 15, 0);
 const HEAD_CENTER = new THREE.Vector3(0, 12, 0);
 const RING_AXIS = new THREE.Vector3(0, 0, 1);
+const BRAIN_COLOR = '#d8d1c8';
+// Sampled from the Satori color bar: 0 = bottom (-3.92), 1 = top (-0.92).
+const SENSITIVITY_RANGE = [-3.92, -0.92];
+const SENSITIVITY_STOPS = [
+  { value: 0, color: '#0a048c' },
+  { value: 0.104, color: '#1804e6' },
+  { value: 0.362, color: '#06e7e8' },
+  { value: 0.62, color: '#e7e707' },
+  { value: 0.879, color: '#e80b04' },
+  { value: 1, color: '#830405' },
+];
 
 function mniToThree(mni: number[]) {
   return new THREE.Vector3(mni[0], mni[2], mni[1]);
@@ -72,12 +86,46 @@ function geometryFromSurface(buffer: ArrayBuffer, label: string) {
   return geometry;
 }
 
+// Each vertex stores its color-bar position (0–1), or -1 where the profile has no sensitivity.
+function sensitivityColors(buffer: ArrayBuffer, vertexCount: number) {
+  if (buffer.byteLength !== vertexCount * 4) {
+    throw new Error(`Sensitivity profile has ${buffer.byteLength / 4} values; expected ${vertexCount}`);
+  }
+  const positions = new Float32Array(buffer);
+  const neutral = new THREE.Color(BRAIN_COLOR);
+  const stops = SENSITIVITY_STOPS.map((stop) => ({ ...stop, color: new THREE.Color(stop.color) }));
+  const color = new THREE.Color();
+  const colors = new Float32Array(vertexCount * 3);
+  positions.forEach((position, index) => {
+    if (position < 0) {
+      color.copy(neutral);
+    } else {
+      const upper = Math.max(1, stops.findIndex((stop) => position <= stop.value));
+      const lower = stops[upper - 1];
+      color.copy(lower.color).lerp(stops[upper].color, (position - lower.value) / (stops[upper].value - lower.value));
+    }
+    color.toArray(colors, index * 3);
+  });
+  return colors;
+}
+
+function setSensitivityVisibility(
+  brain: THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial>,
+  visible: boolean,
+) {
+  brain.material.vertexColors = visible;
+  brain.material.color.set(visible ? '#ffffff' : BRAIN_COLOR);
+  brain.material.needsUpdate = true;
+}
+
 export default function BrainMontage3D({
   channels,
   optodes,
   shortDetectorIds,
   showSources,
   showDetectors,
+  showSensitivity,
+  selectedOptodeIds,
   activeChannelId,
   assetBasePath,
   onSelect,
@@ -85,12 +133,19 @@ export default function BrainMontage3D({
   const hostRef = useRef<HTMLDivElement>(null);
   const viewerRef = useRef<ViewerRefs | null>(null);
   const selectRef = useRef(onSelect);
+  const sensitivityVisibilityRef = useRef(showSensitivity);
   const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   const [hoveredChannelId, setHoveredChannelId] = useState<string | null>(null);
 
   useEffect(() => {
     selectRef.current = onSelect;
   }, [onSelect]);
+
+  useEffect(() => {
+    sensitivityVisibilityRef.current = showSensitivity;
+    const brain = viewerRef.current?.brain;
+    if (brain) setSensitivityVisibility(brain, showSensitivity);
+  }, [showSensitivity]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -126,7 +181,7 @@ export default function BrainMontage3D({
 
     const montage = new THREE.Group();
     scene.add(montage);
-    viewerRef.current = { camera, controls, montage, scene };
+    viewerRef.current = { camera, controls, montage, scene, brain: null };
 
     const abortController = new AbortController();
     const loadSurface = (filename: string) => fetch(`${assetBasePath}/${filename}`, { signal: abortController.signal })
@@ -135,13 +190,18 @@ export default function BrainMontage3D({
         return response.arrayBuffer();
       });
 
-    Promise.all([loadSurface('brain-surface.bin'), loadSurface('scalp-surface.bin')])
-      .then(([brainBuffer, scalpBuffer]) => {
+    Promise.all([loadSurface('brain-surface.bin'), loadSurface('scalp-surface.bin'), loadSurface('sensitivity-profile.bin')])
+      .then(([brainBuffer, scalpBuffer, sensitivityBuffer]) => {
         if (abortController.signal.aborted) return;
+        const brainGeometry = geometryFromSurface(brainBuffer, 'brain');
+        brainGeometry.setAttribute('color', new THREE.BufferAttribute(
+          sensitivityColors(sensitivityBuffer, brainGeometry.getAttribute('position').count),
+          3,
+        ));
         const brain = new THREE.Mesh(
-          geometryFromSurface(brainBuffer, 'brain'),
+          brainGeometry,
           new THREE.MeshStandardMaterial({
-            color: '#d8d1c8',
+            color: BRAIN_COLOR,
             roughness: 0.86,
             metalness: 0.02,
             side: THREE.DoubleSide,
@@ -151,6 +211,8 @@ export default function BrainMontage3D({
         brain.name = 'ICBM152 brain surface';
         brain.renderOrder = 0;
         scene.add(brain);
+        if (viewerRef.current) viewerRef.current.brain = brain;
+        setSensitivityVisibility(brain, sensitivityVisibilityRef.current);
 
         const scalp = new THREE.Mesh(
           geometryFromSurface(scalpBuffer, 'scalp'),
@@ -326,12 +388,13 @@ export default function BrainMontage3D({
       if (shortDetectorIds.has(optode.id)) continue;
       if (optode.type === 'source' && !showSources) continue;
       if (optode.type === 'detector' && !showDetectors) continue;
+      if (selectedOptodeIds && !selectedOptodeIds.has(optode.id)) continue;
       const marker = new THREE.Mesh(geometry, optode.type === 'source' ? sourceMaterial : detectorMaterial);
       marker.position.copy(mniToThree(optode.mni));
       marker.renderOrder = 5;
       viewer.montage.add(marker);
     }
-  }, [activeChannelId, channels, hoveredChannelId, optodes, shortDetectorIds, showDetectors, showSources, status]);
+  }, [activeChannelId, channels, hoveredChannelId, optodes, shortDetectorIds, selectedOptodeIds, showDetectors, showSources, status]);
 
   const resetView = () => {
     const viewer = viewerRef.current;
@@ -342,8 +405,16 @@ export default function BrainMontage3D({
   };
 
   return (
-    <div className="brain-viewer" role="img" aria-label="Interactive 3D ICBM152 brain with the MULPA optode montage">
+    <div className="brain-viewer" role="img" aria-label={`Interactive 3D ICBM152 brain with the MULPA optode montage${showSensitivity ? ' and cortical sensitivity profile' : ''}`}>
       <div className="brain-canvas" ref={hostRef} />
+      {status === 'ready' && showSensitivity && (
+        <div className="sensitivity-legend" aria-label={`Sensitivity color scale from ${SENSITIVITY_RANGE[0]} to ${SENSITIVITY_RANGE[1]}`}>
+          <span>Sensitivity</span>
+          <b>{SENSITIVITY_RANGE[1].toFixed(2)}</b>
+          <i aria-hidden="true" style={{ background: `linear-gradient(0deg, ${SENSITIVITY_STOPS.map((stop) => `${stop.color} ${stop.value * 100}%`).join(', ')})` }} />
+          <b>{SENSITIVITY_RANGE[0].toFixed(2)}</b>
+        </div>
+      )}
       <div className="brain-viewer-guide">
         <span><i className="mouse-icon" aria-hidden="true" /> Drag to rotate · scroll to zoom · hover and click a channel</span>
         <button type="button" onClick={resetView}>Reset view</button>

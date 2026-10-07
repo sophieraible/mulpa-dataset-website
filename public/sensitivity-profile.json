@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "vertexCount": 19999,
+  "surface": "C:/Users/P70091213/Documents/Satori/MNITemplates/mni152_2009_bvbabel_blender20k.srf",
+  "noSignalStoredValue": 0.6744186282157898,
+  "noSignalVertices": 12422,
+  "colorBarRange": [
+    -3.92,
+    -0.92
+  ],
+  "encoding": "float32 color-bar position per vertex: 1 = top (highest), 0 = bottom, -1 = no sensitivity"
+}

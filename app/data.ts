@@ -72,7 +72,7 @@ const participantTsv = `
 sub-01\t23\t1\t1\t2\t56\t1\t11111111
 sub-02\t26\t1\t1\t2\t56\t1\t11111111
 sub-03\t21\t1\t1\t1\t56\t1\t11111111
-sub-04\t27\t1\t1\t1\t56\t1\t11111101
+sub-04\t27\t1\t1\t1\t56\t1\t11111111
 sub-05\t26\t2\t2\t2\t58\t1\t11110111
 sub-06\t24\t2\t2\t2\t58\t1\t11110111
 sub-07\t25\t1\t1\t2\t58\t1\t11111011
@@ -160,7 +160,7 @@ export const participants: Participant[] = participantTsv.split('\n').map((line)
 
 export const taskCards = [
   {
-    key: 'rest', number: '01', name: 'Rest', count: '56 / 57 complete',
+    key: 'rest', number: '01', name: 'Rest', count: '57 / 57 complete',
     design: 'REST · 5 minutes · fixation',
     description: 'Eyes-open rest for intrinsic and systemic physiology analyses.', accent: 'lime',
   },

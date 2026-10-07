@@ -2,7 +2,7 @@ participant_id	age	sex	gender	handedness	head_size	questionnaires_complete	task-
 sub-01	23	1	1	2	56	true	true	true	true	true	true	true	true	true
 sub-02	26	1	1	2	56	true	true	true	true	true	true	true	true	true
 sub-03	21	1	1	1	56	true	true	true	true	true	true	true	true	true
-sub-04	27	1	1	1	56	true	true	true	true	true	true	true	false	true
+sub-04	27	1	1	1	56	true	true	true	true	true	true	true	true	true
 sub-05	26	2	2	2	58	true	true	true	true	true	false	true	true	true
 sub-06	24	2	2	2	58	true	true	true	true	true	false	true	true	true
 sub-07	25	1	1	2	58	true	true	true	true	true	true	false	true	true
@@ -50,7 +50,7 @@ sub-48	26	1	1	2	56	false	true	true	true	true	true	true	true	true
 sub-49	23	1	1	2	58	true	false	true	true	true	true	true	true	true
 sub-50	28	2	2	3	58	true	false	true	true	true	true	true	true	true
 sub-51	23	1	1	2	58	true	false	true	true	true	true	true	true	true
-sub-52	23	1	1	2	58	true	true	false	true	true	false	true	true	true
+sub-52	23	1	1	2	58	true	true	true	true	true	false	true	true	true
 sub-53	25	1	1	2	58	true	true	true	true	true	false	false	true	true
 sub-54	19	2	2	1	58	true	false	true	true	true	true	true	true	true
 sub-55	31	n/a	n/a	n/a	n/a	false	false	true	true	true	true	true	true	true
