@@ -40,7 +40,7 @@ button { font: inherit; }
 .footer-logo { filter: none; }
 nav { display: flex; font-size: 14px; gap: 28px; }
 nav a:hover { color: var(--teal); }
-.site-header > .button { justify-self: end; }
+.header-actions { display: flex; gap: 8px; justify-self: end; }
 
 .button {
   align-items: center; background: var(--ink); border: 1px solid var(--ink);
@@ -49,6 +49,8 @@ nav a:hover { color: var(--teal); }
 }
 .button:hover { background: var(--teal-dark); border-color: var(--teal-dark); }
 .button-small { padding: 9px 16px; }
+.button-outline { background: transparent; color: var(--ink); }
+.button-outline:hover { color: white; }
 .text-link { border-bottom: 1px solid var(--ink); font-size: 14px; font-weight: 650; padding-bottom: 3px; }
 
 .hero {
@@ -284,7 +286,8 @@ footer > div > p { color: #b8c7d4; font-size: 12px; line-height: 1.5; margin: 18
 @media (max-width: 560px) {
   .site-header { padding: 0 20px; }
   .brand img { max-height: 38px; width: min(190px, 52vw); }
-  .site-header > .button { font-size: 12px; padding: 8px 10px; }
+  .header-actions { gap: 6px; }
+  .header-actions .button { font-size: 12px; padding: 8px 10px; }
   .hero, .section, .dataset-overview { padding-left: 20px; padding-right: 20px; }
   h1 { font-size: 46px; }
   .hero-actions { align-items: flex-start; flex-direction: column; }
