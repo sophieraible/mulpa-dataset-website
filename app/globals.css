@@ -15,7 +15,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 74px; }
 body {
   margin: 0;
   background: var(--paper);
@@ -27,13 +27,20 @@ button { font: inherit; }
 
 .site-header {
   align-items: center;
+  background: var(--paper);
   border-bottom: 1px solid rgba(23, 34, 30, .12);
+  /* Extend the pinned bar's background and rule across the full viewport width. */
+  box-shadow: 0 0 0 100vmax var(--paper), 0 1px 0 100vmax rgba(23, 34, 30, .12);
+  clip-path: inset(0 -100vmax -1px);
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   margin: 0 auto;
   max-width: 1440px;
   min-height: 74px;
   padding: 0 5vw;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 .brand { align-items: center; display: flex; line-height: 1; }
 .brand img { display: block; height: auto; max-height: 50px; object-fit: contain; width: min(310px, 27vw); }
