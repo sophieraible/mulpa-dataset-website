@@ -15,6 +15,14 @@ The exported site is written to `out/`. The GitHub Actions workflow in
 `.github/workflows/deploy-pages.yml` runs this command automatically after a
 push to `main`.
 
+## Satori Viewer
+
+Brain Innovation hosts the embedded Satori Viewer and the MULPA v1.1 recordings
+it opens. The viewer host must allow the website's origin to embed it.
+
+`public/satori-catalog.json` lists the hosted recordings, file sizes, and
+completeness flags. Update the catalog when the hosted recording inventory changes.
+
 ## Data included in this repository
 
 `data/participants.tsv` is included so the participant explorer reflects the

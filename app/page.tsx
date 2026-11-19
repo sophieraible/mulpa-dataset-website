@@ -2,6 +2,7 @@
 
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import generatedData from './derived-data.json';
+import SatoriViewer from './SatoriViewer';
 import { Participant, PhysiologyQc, TaskKey, participants, physiology, taskCards, taskColumns } from './data';
 
 const assetBasePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
@@ -490,7 +491,7 @@ export default function Home() {
     <main>
       <header className="site-header">
         <a className="brand" href="#top" aria-label="MULPA home"><img className="header-logo" src={`${assetBasePath}/maastricht-university-logo.png`} alt="Maastricht University" /></a>
-        <nav aria-label="Main navigation"><a href="#montage">Montage</a><a href="#participants">Participants</a><a href="#tasks">Tasks</a><a href="#physiology">Physiology</a><a href="#signals">Example</a><a href="#cite">Cite</a></nav>
+        <nav aria-label="Main navigation"><a href="#montage">Montage</a><a href="#participants">Participants</a><a href="#tasks">Tasks</a><a href="#physiology">Physiology</a><a href="#signals">Example</a><a href="#viewer">Viewer</a><a href="#cite">Cite</a></nav>
         <div className="header-actions">
           <a className="button button-small button-outline" href="https://neurojson.org/wiki/index.cgi?register/fNIRS_Open_Dataset_Contest_2026_Vote" target="_blank" rel="noreferrer">Vote for MULPA</a>
           <a className="button button-small" href="https://zenodo.org/records/21033499" target="_blank" rel="noreferrer">Open dataset</a>
@@ -509,6 +510,7 @@ export default function Home() {
       <TaskCards />
       <PhysiologyInventory selected={selectedSignals} onToggle={toggleSignal} />
       <SynchronizedSignals selectedSignals={selectedSignals} />
+      <SatoriViewer />
       <CitationSection />
       <footer>
         <div><a className="brand" href="#top"><img className="footer-logo" src={`${assetBasePath}/maastricht-university-logo-white.png`} alt="Maastricht University" /></a></div>
